@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-ink font-body antialiased;
+  }
+  ::selection {
+    @apply bg-tierS text-ink;
+  }
+}
+
+@layer components {
+  .brutal-card {
+    @apply border-3 border-ink bg-paper shadow-brutal;
+  }
+  .brutal-btn {
+    @apply inline-flex items-center justify-center gap-2 border-3 border-ink bg-white px-5 py-2.5 font-bold uppercase tracking-wide shadow-brutal-sm transition-all duration-100 hover:shadow-brutal active:translate-x-[3px] active:translate-y-[3px] active:shadow-none;
+  }
+  .tier-chip {
+    @apply inline-flex h-8 w-8 items-center justify-center border-3 border-ink font-display text-sm leading-none shadow-brutal-sm;
+  }
+  .section-heading {
+    @apply font-display uppercase tracking-tight;
+  }
+  .field {
+    @apply w-full border-3 border-ink bg-white px-3.5 py-2.5 text-sm font-semibold outline-none transition focus:shadow-brutal-sm;
+  }
+}
+
+/* Brutal scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f1e8;
+}
+::-webkit-scrollbar-thumb {
+  background: #0a0a0a;
+  border: 3px solid #f5f1e8;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6c2bd9;
+}
+
+/* Rating bar fill animation */
+.rating-bar-fill {
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dot-grid paper texture */
+.bg-dotgrid {
+  background-image: radial-gradient(#0a0a0a1f 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+.bg-dotgrid-light {
+  background-image: radial-gradient(#f5f1e81f 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+
+/* Diagonal hazard stripes */
+.bg-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #0a0a0a 0,
+    #0a0a0a 12px,
+    #ffd60a 12px,
+    #ffd60a 24px
+  );
+}
