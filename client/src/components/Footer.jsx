@@ -34,7 +34,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-700 px-4 py-4 text-center text-xs uppercase tracking-widest text-gray-500">
-        © {new Date().getFullYear()} GurgaonFlat — Built for Gurgaon
+        © {new Date().getFullYear()} GurgaonFlat — <a href="https://gurgaonflat.online" className="hover:text-tierS">gurgaonflat.online</a> — Built for Gurgaon
       </div>
     </footer>
   );
