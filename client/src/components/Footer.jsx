@@ -5,9 +5,7 @@ export default function Footer() {
     <footer className="border-t-3 border-ink bg-ink text-cream">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-3">
         <div>
-          <div className="inline-block border-3 border-cream bg-tierS px-2 py-1 font-display text-lg text-ink">
-            GURGAON<span className="text-accent">FLAT</span>
-          </div>
+          <img src="/logo.png" alt="GurgaonFlat" className="h-10 w-auto" />
           <p className="mt-3 max-w-xs text-sm text-gray-300">
             Rate your society. See where it ranks in Gurgaon. Real residents. Real opinions.
           </p>
