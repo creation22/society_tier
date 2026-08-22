@@ -43,16 +43,17 @@ export default function Navbar() {
 
           <Link
             to="/societies?openRate=1"
-            className="brutal-btn hidden bg-accent text-white shadow-brutal-accent sm:inline-flex"
+            className="brutal-btn ml-auto bg-accent text-white shadow-brutal-accent !px-3 !py-2 text-xs sm:ml-0 sm:!px-5 sm:!py-2.5 sm:text-sm"
           >
-            Rate Your Society
+            <span className="sm:hidden">Rate ★</span>
+            <span className="hidden sm:inline">Rate Your Society</span>
           </Link>
 
           <button
             aria-label="Open menu"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(true)}
-            className="brutal-btn ml-auto flex h-10 w-12 !px-0 sm:ml-3"
+            className="brutal-btn flex h-10 w-12 shrink-0 !px-0 sm:ml-3"
           >
             <span className="flex w-5 flex-col gap-[5px]">
               <span className="h-[3px] w-full bg-ink" />
