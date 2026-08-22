@@ -43,10 +43,9 @@ export default function Navbar() {
 
           <Link
             to="/societies?openRate=1"
-            className="brutal-btn ml-auto bg-accent text-white shadow-brutal-accent !px-3 !py-2 text-xs sm:ml-0 sm:!px-5 sm:!py-2.5 sm:text-sm"
+            className="brutal-btn ml-auto bg-accent text-white shadow-brutal-accent !px-3 !py-2 text-[11px] sm:ml-0 sm:!px-5 sm:!py-2.5 sm:text-sm"
           >
-            <span className="sm:hidden">Rate ★</span>
-            <span className="hidden sm:inline">Rate Your Society</span>
+            Rate Your Society
           </Link>
 
           <button
