@@ -217,7 +217,17 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
           restriction: { latLngBounds: GURGAON_BOUNDS, strictBounds: true },
           mapTypeControl: false,
           streetViewControl: false,
-          fullscreenControl: true
+          fullscreenControl: true,
+          // Hide shops/business labels, keep landmarks, hospitals, parks, schools, transit.
+          styles: [
+            { featureType: 'poi.business', stylers: [{ visibility: 'off' }] },
+            { featureType: 'poi.medical', stylers: [{ visibility: 'on' }] },
+            { featureType: 'poi.government', stylers: [{ visibility: 'on' }] },
+            { featureType: 'poi.park', stylers: [{ visibility: 'on' }] },
+            { featureType: 'poi.school', stylers: [{ visibility: 'on' }] },
+            { featureType: 'poi.attraction', stylers: [{ visibility: 'on' }] },
+            { featureType: 'transit', stylers: [{ visibility: 'on' }] }
+          ]
         });
         mapRef.current = map;
         map.addListener('idle', () => {
