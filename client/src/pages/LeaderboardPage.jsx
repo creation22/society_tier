@@ -84,6 +84,10 @@ export default function LeaderboardPage() {
             <div key={i} className="h-14 animate-pulse border-3 border-ink bg-ink/10" />
           ))}
         </div>
+      ) : items.length === 0 ? (
+        <div className="mt-8 border-3 border-dashed border-ink p-10 text-center font-bold uppercase text-gray-600">
+          No societies have enough ratings yet. Be the first to rate.
+        </div>
       ) : (
         <ol className="mt-8 space-y-3">
           {items.map((s, i) => (
@@ -102,7 +106,7 @@ function Movement({ delta }) {
   return <span title={`Down ${-delta}`} className="font-display text-red-600">↓{-delta}</span>;
 }
 
-function LeaderRow({ rank, society: s }) {
+function LeaderRow({ rank, society: s, movement }) {
   function onTilt(e) {
     const el = e.currentTarget;
     const x = (e.clientX - el.getBoundingClientRect().left) / el.offsetWidth - 0.5;

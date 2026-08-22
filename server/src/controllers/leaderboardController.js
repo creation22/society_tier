@@ -31,8 +31,8 @@ exports.leaderboard = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: `Unknown category "${category}"` });
   }
 
-  // Only rank societies with enough ratings to be credible.
-  const societies = await Society.find({ ratingCount: { $gte: 3 } })
+  // Rank all societies; the Bayesian prior already discounts low-count ones.
+  const societies = await Society.find({ ratingCount: { $gte: 1 } })
     .select('name slug builder sector area tier overallRating rankingScore ratingCount categoryScores')
     .lean();
 
