@@ -31,7 +31,7 @@ export default function MapPage() {
   const debouncedSector = useDebounce(sector);
   const listRef = useRef(null);
 
-  useSEO({ title: 'Gurgaon Society Map — Society Tier', path: '/' });
+  useSEO({ title: 'Gurgaon Society Map — GurgaonTier', path: '/' });
 
   const params = useMemo(
     () => ({

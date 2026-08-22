@@ -36,7 +36,7 @@ export default function SocietiesPage() {
     setSearchParams(next);
   }
 
-  useSEO({ title: 'All Gurgaon Societies — Society Tier', path: '/societies' });
+  useSEO({ title: 'All Gurgaon Societies — GurgaonTier', path: '/societies' });
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">

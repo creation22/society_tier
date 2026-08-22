@@ -31,7 +31,7 @@ app.use('/api/auth/login', writeLimiter);
 const guestLimiter = rateLimit({ windowMs: 60 * 1000, max: 10 });
 app.use('/api/auth/guest', guestLimiter);
 
-app.get('/', (_req, res) => res.json({ name: 'Society Tier API', status: 'ok' }));
+app.get('/', (_req, res) => res.json({ name: 'GurgaonTier API', status: 'ok' }));
 
 app.use('/api/societies', require('./routes/societies'));
 app.use('/api/comments', require('./routes/commentActions'));

@@ -15,7 +15,7 @@ export default function ComparePage() {
   const [societies, setSocieties] = useState(null);
   const [pickerFor, setPickerFor] = useState(null);
 
-  useSEO({ title: 'Compare Gurgaon Societies — Society Tier', path: '/compare' });
+  useSEO({ title: 'Compare Gurgaon Societies — GurgaonTier', path: '/compare' });
 
   useEffect(() => {
     if (!slugs.length) {

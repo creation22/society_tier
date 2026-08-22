@@ -1,4 +1,4 @@
-# SOCIETY TIER — Gurgaon Society Tier List
+# GurgaonTier — Gurgaon Society Tier List
 
 > Rate your society. See where it ranks in Gurgaon.
 
