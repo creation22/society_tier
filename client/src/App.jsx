@@ -11,6 +11,8 @@ import ComparePage from './pages/ComparePage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 import NotFound from './pages/NotFound.jsx';
+import FindFlatsPage from './pages/FindFlatsPage.jsx';
+import PrivacyPage from './pages/PrivacyPage.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,6 +39,8 @@ export default function App() {
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/u/:username" element={<ProfilePage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/find-flats" element={<FindFlatsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

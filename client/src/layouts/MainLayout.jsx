@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
+import SupportButton from '../components/SupportButton.jsx';
 
 export default function MainLayout() {
   const { pathname } = useLocation();
@@ -13,6 +14,7 @@ export default function MainLayout() {
         <Outlet />
       </main>
       {!isFullScreen && <Footer />}
+      <SupportButton />
     </div>
   );
 }

@@ -391,7 +391,7 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
       {ready && (
         <>
           {/* Tier legend */}
-          <div className="absolute bottom-6 left-4 z-10 hidden flex-col gap-1.5 border-3 border-ink bg-cream p-3 shadow-brutal-sm sm:flex">
+          <div className="absolute top-4 left-4 z-10 hidden flex-col gap-1.5 border-3 border-ink bg-cream p-3 shadow-brutal-sm sm:flex">
             {Object.entries(TIER_META).map(([tier, meta]) => (
               <div key={tier} className="flex items-center gap-2">
                 <span className="h-3 w-3 shrink-0 border-2 border-ink" style={{ background: meta.color }} />

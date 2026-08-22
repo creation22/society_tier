@@ -16,13 +16,21 @@ export default function Footer() {
           <Link to="/leaderboard" className="hover:text-tierS">Leaderboard</Link>
           <Link to="/" className="hover:text-tierS">Map</Link>
           <Link to="/societies" className="hover:text-tierS">All Societies</Link>
+          <Link to="/find-flats" className="hover:text-tierS">Find Flats</Link>
           <Link to="/compare" className="hover:text-tierS">Compare</Link>
+          <Link to="/privacy" className="hover:text-tierS">Privacy Policy</Link>
         </div>
         <div className="text-sm text-gray-400">
           <p className="font-bold uppercase text-cream">Community-powered rankings</p>
           <p className="mt-2">
             Ratings are confidence-adjusted and come from residents — not brokers, not paid listings.
           </p>
+          <a
+            href="mailto:creation2224@gmail.com?subject=GurgaonTier%20—%20Developer%20Contact"
+            className="mt-4 inline-block border-3 border-cream bg-transparent px-3 py-1.5 font-bold uppercase tracking-wide text-cream transition-colors hover:bg-tierS hover:text-ink"
+          >
+            Contact the Developer →
+          </a>
         </div>
       </div>
       <div className="border-t border-gray-700 px-4 py-4 text-center text-xs uppercase tracking-widest text-gray-500">

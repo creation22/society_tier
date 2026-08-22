@@ -6,6 +6,7 @@ const LINKS = [
   { to: '/', label: 'Map', end: true },
   { to: '/explore', label: 'Explore' },
   { to: '/leaderboard', label: 'Rankings' },
+  { to: '/find-flats', label: 'FindFlats' },
   { to: '/societies', label: 'Societies' },
   { to: '/compare', label: 'Compare' }
 ];
