@@ -32,9 +32,12 @@ export default function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4">
           <Link
             to="/"
-            className="shrink-0 transition-all active:translate-x-[3px] active:translate-y-[3px]"
+            className="flex shrink-0 items-center gap-2 transition-all active:translate-x-[3px] active:translate-y-[3px]"
           >
             <img src="/logo.png" alt="GurgaonFlat" className="h-9 w-auto sm:h-11" />
+            <span className="font-display text-lg tracking-tight sm:text-xl">
+              Gurgaon<span className="text-accent">Flat</span>
+            </span>
           </Link>
 
           <div className="ml-auto hidden items-center gap-3 lg:flex">
@@ -74,8 +77,11 @@ export default function Navbar() {
           }`}
         >
           <div className="flex items-center justify-between">
-            <Link to="/" onClick={close} className="shrink-0">
+            <Link to="/" onClick={close} className="flex shrink-0 items-center gap-2">
               <img src="/logo.png" alt="GurgaonFlat" className="h-8 w-auto" />
+              <span className="font-display text-base tracking-tight">
+                Gurgaon<span className="text-accent">Flat</span>
+              </span>
             </Link>
             <button
               aria-label="Close menu"
