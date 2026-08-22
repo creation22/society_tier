@@ -281,7 +281,7 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
         position: { lat: s.latitude, lng: s.longitude },
         map: mapRef.current,
         title: `${s.name} — ${formatRating(s.overallRating)}★ (${s.tier})`,
-        icon: pinIcon(maps, s, { compact: zoomRef.current < NAME_ZOOM }),
+        icon: pinIcon(maps, s, { compact: false }),
         zIndex: 10
       });
       marker.addListener('click', () => {
@@ -291,7 +291,7 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
           openInfo(maps, s);
         }
       });
-      return { slug: s.slug, marker, data: s, compact: zoomRef.current < NAME_ZOOM };
+      return { slug: s.slug, marker, data: s, compact: false };
     });
 
     return undefined;
@@ -301,13 +301,13 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
   useEffect(() => {
     if (!ready || !mapRef.current) return;
     const maps = window.google.maps;
-    const wantCompact = zoom < NAME_ZOOM;
     markersRef.current.forEach((m) => {
       const sel = m.slug === selectedSlug;
-      const compact = !sel && wantCompact;
-      if (m.compact !== compact) {
+      const compact = false;
+      if (m.compact !== compact || m.sel !== sel) {
         m.marker.setIcon(pinIcon(maps, m.data, { selected: sel, compact }));
         m.compact = compact;
+        m.sel = sel;
       }
     });
   }, [zoom, selectedSlug, ready]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -321,7 +321,7 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
 
     markersRef.current.forEach((m) => {
       const sel = m.slug === selectedSlug;
-      const compact = !sel && zoomRef.current < NAME_ZOOM;
+      const compact = false;
       m.marker.setIcon(pinIcon(maps, m.data, { selected: sel, compact }));
       m.compact = compact;
       m.marker.setZIndex(sel ? 1000 : 10);
