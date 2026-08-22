@@ -182,6 +182,7 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
   const lastAnchorRef = useRef(null);
   const zoomRef = useRef(DEFAULT_ZOOM);
   const aqiTokenRef = useRef(0);
+  const fittedRef = useRef(false);
 
   function attachAqi(s) {
     const token = ++aqiTokenRef.current;
@@ -294,6 +295,17 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
       });
       return { slug: s.slug, marker, data: s, compact: false };
     });
+
+    // Frame all societies once on first load — centres Gurugram on any screen.
+    if (!fittedRef.current && markersRef.current.length) {
+      fittedRef.current = true;
+      const bounds = new maps.LatLngBounds();
+      markersRef.current.forEach((m) => bounds.extend(m.marker.getPosition()));
+      mapRef.current.fitBounds(bounds, 40);
+      maps.event.addListenerOnce(mapRef.current, 'idle', () => {
+        if (mapRef.current && mapRef.current.getZoom() > 14) mapRef.current.setZoom(14);
+      });
+    }
 
     return undefined;
   }, [ready, societies]); // eslint-disable-line react-hooks/exhaustive-deps

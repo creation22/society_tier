@@ -38,7 +38,7 @@ export default function MapPage() {
       limit: 100,
       ...(tiers.size ? { tier: [...tiers].join(',') } : {}),
       ...(minRating ? { minRating } : {}),
-      ...(areas.size ? { area: [...areas][0] } : {}),
+      ...(areas.size ? { area: [...areas][0] } : {}), // single-select: picking one clears the others
       ...(debouncedSector ? { sector: debouncedSector } : {}),
       ...(bhk ? { bhk } : {}),
       ...(maxPrice ? { maxPrice } : {})
@@ -55,13 +55,8 @@ export default function MapPage() {
       .finally(() => setLoading(false));
   }, [params]);
 
-  const toggle = (setFn) => (value) =>
-    setFn((prev) => {
-      const next = new Set(prev);
-      if (next.has(value)) next.delete(value);
-      else next.add(value);
-      return next;
-    });
+  const pickArea = (value) =>
+    setAreas((prev) => (prev.has(value) ? new Set() : new Set([value])));
 
   const onBoundsChange = useCallback(() => {}, []);
 
@@ -191,7 +186,7 @@ export default function MapPage() {
                   return (
                     <button
                       key={a}
-                      onClick={() => toggle(setAreas)(a)}
+                      onClick={() => pickArea(a)}
                       className={`flex items-center justify-between border-3 border-ink px-3 py-2.5 text-left text-sm font-bold uppercase shadow-brutal-sm transition-all active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
                         on ? 'bg-tierS' : 'bg-white hover:bg-tierS/30'
                       }`}

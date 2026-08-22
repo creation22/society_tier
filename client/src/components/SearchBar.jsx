@@ -50,7 +50,7 @@ export default function SearchBar({ compact = false, autoFocus = false }) {
     results && (results.societies.length > 0 || results.groups.length > 0);
 
   return (
-    <div ref={boxRef} className={`relative ${compact ? 'w-72' : 'w-full'}`}>
+    <div ref={boxRef} className={`relative ${compact ? 'w-full max-w-[288px]' : 'w-full'}`}>
       <div className="flex items-center border-3 border-ink bg-white shadow-brutal-sm transition focus-within:shadow-brutal">
         <span className="pl-3 text-lg">🔍</span>
         <input

@@ -11,14 +11,31 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// On invalid/expired sessions, drop the stale identity so the app can
-// silently acquire a fresh guest session on next load.
+// On invalid/expired sessions, drop the stale identity, silently acquire a
+// fresh guest session and retry the original request once.
 api.interceptors.response.use(
   (res) => res,
-  (err) => {
-    if (err.response && err.response.status === 401) {
+  async (err) => {
+    const cfg = err.config;
+    if (
+      err.response &&
+      err.response.status === 401 &&
+      cfg &&
+      !cfg._retry &&
+      !cfg.url.includes('/auth/')
+    ) {
+      cfg._retry = true;
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      try {
+        const { data } = await api.post('/auth/guest');
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        cfg.headers.Authorization = `Bearer ${data.token}`;
+        return api(cfg);
+      } catch {
+        /* guest mint failed — surface the original error */
+      }
     }
     return Promise.reject(err);
   }

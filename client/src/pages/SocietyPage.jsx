@@ -168,7 +168,7 @@ export default function SocietyPage() {
               bestRating: 10,
               ratingCount: Math.max(1, s.ratingCount)
             }
-          })
+          }).replace(/</g, '\\u003c')
         }}
       />
     </>
