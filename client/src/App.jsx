@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import MainLayout from './layouts/MainLayout.jsx';
 import MapPage from './pages/MapPage.jsx';
 import SocietyPage from './pages/SocietyPage.jsx';
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
+      <Analytics />
     </>
   );
 }
