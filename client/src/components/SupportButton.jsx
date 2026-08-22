@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const UPI_ID = 'srajangupta220-1@okicici';
-const UPI_LINK = `upi://pay?pa=${UPI_ID}&pn=GurgaonTier&tn=Support%20GurgaonTier&cu=INR`;
+const UPI_LINK = `upi://pay?pa=${UPI_ID}&pn=GurgaonFlat&tn=Support%20GurgaonFlat&cu=INR`;
 const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=${encodeURIComponent(UPI_LINK)}`;
 
 /**
@@ -53,7 +53,7 @@ export default function SupportButton() {
                 {copied ? 'Copied ✓' : UPI_ID}
               </button>
               <p className="mt-3 text-[11px] text-gray-500">
-                GurgaonTier is free &amp; open source. Your support keeps it ad-free.
+                GurgaonFlat is free &amp; open source. Your support keeps it ad-free.
               </p>
             </div>
           </div>

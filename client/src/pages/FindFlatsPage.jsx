@@ -1,7 +1,7 @@
 import { useSEO } from '../utils/seo.js';
 
 export default function FindFlatsPage() {
-  useSEO({ title: 'Find Flats — Coming Soon | GurgaonTier', path: '/find-flats' });
+  useSEO({ title: 'Find Flats — Coming Soon | GurgaonFlat', path: '/find-flats' });
 
   return (
     <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center bg-dotgrid px-4 text-center">

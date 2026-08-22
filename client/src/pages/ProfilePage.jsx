@@ -8,7 +8,7 @@ export default function ProfilePage() {
   const { username } = useParams();
   const [data, setData] = useState(null);
 
-  useSEO({ title: `@${username} — GurgaonTier Profile`, path: `/u/${username}` });
+  useSEO({ title: `@${username} — GurgaonFlat Profile`, path: `/u/${username}` });
 
   useEffect(() => {
     setData(null);

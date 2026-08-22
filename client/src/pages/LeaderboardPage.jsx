@@ -23,7 +23,7 @@ export default function LeaderboardPage() {
   const [movement, setMovement] = useState({});
 
   useSEO({
-    title: `The Gurgaon Leaderboard — ${LEADERBOARD_TABS.find((t) => t.id === category)?.label || 'Overall'} | GurgaonTier`,
+    title: `The Gurgaon Leaderboard — ${LEADERBOARD_TABS.find((t) => t.id === category)?.label || 'Overall'} | GurgaonFlat`,
     description: `Ranked list of Gurgaon societies by ${category}. Confidence-adjusted scores based on real resident ratings.`,
     path: `/leaderboard`
   });

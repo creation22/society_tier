@@ -1,7 +1,7 @@
 import { useSEO } from '../utils/seo.js';
 
 export default function PrivacyPage() {
-  useSEO({ title: 'Privacy Policy — GurgaonTier', path: '/privacy' });
+  useSEO({ title: 'Privacy Policy — GurgaonFlat', path: '/privacy' });
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -11,7 +11,7 @@ export default function PrivacyPage() {
       <div className="mt-8 space-y-6 text-gray-700">
         <Section title="Open-source project">
           <p>
-            GurgaonTier is a free, open-source community project. The code is public and auditable —
+            GurgaonFlat is a free, open-source community project. The code is public and auditable —
             there is no hidden tracking, no broker-paid placement, and no pay-to-rank. If you can read
             code, you can verify everything here yourself.
           </p>

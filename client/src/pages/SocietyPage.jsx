@@ -34,7 +34,7 @@ export default function SocietyPage() {
   }, [slug]);
 
   useSEO({
-    title: data ? `${data.society.name} — ${Number(data.society.overallRating).toFixed(1)} ★ · ${data.society.tier} Tier | GurgaonTier` : 'Society — GurgaonTier',
+    title: data ? `${data.society.name} — ${Number(data.society.overallRating).toFixed(1)} ★ · ${data.society.tier} Tier | GurgaonFlat` : 'Society — GurgaonFlat',
     description: data
       ? `${data.society.name} in ${data.society.sector}, Gurgaon is rated ${Number(data.society.overallRating).toFixed(1)}/10 by ${data.society.ratingCount} residents. ${data.society.tier} Tier. Read resident reviews and rate it yourself.`
       : undefined,

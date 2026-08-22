@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-3">
         <div>
           <div className="inline-block border-3 border-cream bg-tierS px-2 py-1 font-display text-lg text-ink">
-            GURGAON<span className="text-accent">TIER</span>
+            GURGAON<span className="text-accent">FLAT</span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-gray-300">
             Rate your society. See where it ranks in Gurgaon. Real residents. Real opinions.
@@ -26,7 +26,7 @@ export default function Footer() {
             Ratings are confidence-adjusted and come from residents — not brokers, not paid listings.
           </p>
           <a
-            href="mailto:creation2224@gmail.com?subject=GurgaonTier%20—%20Developer%20Contact"
+            href="mailto:creation2224@gmail.com?subject=GurgaonFlat%20—%20Developer%20Contact"
             className="mt-4 inline-block border-3 border-cream bg-transparent px-3 py-1.5 font-bold uppercase tracking-wide text-cream transition-colors hover:bg-tierS hover:text-ink"
           >
             Contact the Developer →
@@ -34,7 +34,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-700 px-4 py-4 text-center text-xs uppercase tracking-widest text-gray-500">
-        © {new Date().getFullYear()} GurgaonTier — Built for Gurgaon
+        © {new Date().getFullYear()} GurgaonFlat — Built for Gurgaon
       </div>
     </footer>
   );

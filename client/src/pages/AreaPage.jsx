@@ -10,7 +10,7 @@ export default function AreaPage() {
   const [data, setData] = useState(null);
 
   useSEO({
-    title: data ? `Best Societies in ${data.area} — Ranked | GurgaonTier` : `Area — GurgaonTier`,
+    title: data ? `Best Societies in ${data.area} — Ranked | GurgaonFlat` : `Area — GurgaonFlat`,
     description: data ? `Ranked societies in ${data.area}, Gurgaon based on resident ratings.` : undefined,
     path: `/area/${area}`
   });

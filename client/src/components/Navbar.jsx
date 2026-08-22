@@ -34,7 +34,7 @@ export default function Navbar() {
             to="/"
             className="shrink-0 border-3 border-ink bg-tierS px-3 py-1.5 font-display text-lg shadow-brutal-sm transition-all active:translate-x-[3px] active:translate-y-[3px] active:shadow-none sm:text-xl"
           >
-            GURGAON<span className="text-accent">TIER</span>
+            GURGAON<span className="text-accent">FLAT</span>
           </Link>
 
           <div className="ml-auto hidden items-center gap-3 lg:flex">
@@ -75,7 +75,7 @@ export default function Navbar() {
         >
           <div className="flex items-center justify-between">
             <span className="border-3 border-ink bg-tierS px-2.5 py-1 font-display text-base">
-              GURGAON<span className="text-accent">TIER</span>
+              GURGAON<span className="text-accent">FLAT</span>
             </span>
             <button
               aria-label="Close menu"
