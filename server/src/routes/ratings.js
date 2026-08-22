@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const c = require('../controllers/ratingController');
 const { requireAuth, optionalAuth } = require('../middleware/auth');
 
