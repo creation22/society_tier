@@ -1,5 +1,5 @@
 require('dotenv').config();
-const express = require('express');
+const express = require('express'); // cors reload
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
