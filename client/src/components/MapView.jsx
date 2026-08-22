@@ -218,6 +218,7 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: true,
+          gestureHandling: 'greedy',
           // Hide shops/business labels, keep landmarks, hospitals, parks, schools, transit.
           styles: [
             { featureType: 'poi.business', stylers: [{ visibility: 'off' }] },
