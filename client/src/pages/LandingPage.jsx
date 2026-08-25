@@ -56,13 +56,16 @@ export default function LandingPage() {
       {/* ───────── Hero ───────── */}
       <section className="relative isolate flex min-h-[88vh] flex-col justify-center overflow-hidden bg-ink py-32 sm:py-44">
         <CityVideoBackdrop fadeTo="#fafaf9" />
+        {/* Soft radial scrim behind the hero copy so small text stays legible
+            over bright sky portions of the video. */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[40rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(0_0_0/0.38),transparent_70%)]" />
         <div className="relative mx-auto max-w-7xl px-4">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
             <motion.span
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-md"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-md [text-shadow:0_1px_6px_rgb(0_0_0/0.45)]"
             >
               <Sparkle weight="duotone" className="h-3.5 w-3.5" />
               Community-powered · No broker BS
@@ -92,7 +95,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-8 max-w-xl text-lg leading-relaxed text-white/85 [text-shadow:0_1px_8px_rgb(0_0_0/0.4)]"
+              className="mt-8 max-w-xl text-lg leading-relaxed text-white [text-shadow:0_1px_12px_rgb(0_0_0/0.55),0_0_24px_rgb(0_0_0/0.35)]"
             >
               A tier list for Gurgaon’s residential societies — built on real resident ratings, threaded
               discussions and a confidence-adjusted ranking algorithm. Find the best, avoid the rest.
@@ -122,19 +125,19 @@ export default function LandingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.95 }}
-              className="mt-10 flex flex-col items-center gap-4 text-sm text-white/80 sm:flex-row sm:gap-4"
+              className="mt-10 flex flex-col items-center gap-4 text-sm text-white sm:flex-row sm:gap-4 [text-shadow:0_1px_10px_rgb(0_0_0/0.55),0_0_20px_rgb(0_0_0/0.35)]"
             >
               <div className="flex -space-x-2.5">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <span
                     key={i}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-sm"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 bg-white/15 backdrop-blur-sm"
                     style={{ zIndex: 10 - i }}
                   >
-                    <User weight="fill" className="h-4 w-4 text-white/80" />
+                    <User weight="fill" className="h-4 w-4 text-white" />
                   </span>
                 ))}
-                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-ink/50 text-[11px] font-bold text-white backdrop-blur-sm">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 bg-ink/60 text-[11px] font-bold text-white backdrop-blur-sm">
                   +2K
                 </span>
               </div>
