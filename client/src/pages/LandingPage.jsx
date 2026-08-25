@@ -21,7 +21,6 @@ import Backdrop from '../components/ui/Backdrop.jsx';
 import CityVideoBackdrop from '../components/ui/CityVideoBackdrop.jsx';
 import FeaturesShowcase from '../components/landing/FeaturesShowcase.jsx';
 import SocietyCard from '../components/SocietyCard.jsx';
-import { TIER_META } from '../utils/tier.js';
 import { useSEO } from '../utils/seo.js';
 import api from '../utils/api.js';
 
@@ -32,6 +31,15 @@ const STEPS = [
 ];
 
 const AREAS = ['Golf Course Rd', 'Golf Course Ext', 'Dwarka Expressway', 'New Gurgaon', 'Sohna Road', 'MG Road', 'Cyber City'];
+
+// Tier display rows — score ranges mirror server thresholds (tier.js).
+const TIER_ROWS = [
+  { tier: 'S', color: '#FFD60A', label: 'Elite',       tag: 'ELITE',   desc: 'Best of the best. Residents consistently rave.', lo: '8.8', hi: '10',  fill: '100%' },
+  { tier: 'A', color: '#06D6A0', label: 'Great',       tag: 'GREAT',   desc: 'Strong all-rounders most residents would recommend.', lo: '8.0', hi: '8.8', fill: '80%' },
+  { tier: 'B', color: '#4361EE', label: 'Good',        tag: 'GOOD',    desc: 'Solid, liveable, with a few rough edges.', lo: '6.8', hi: '8.0', fill: '60%' },
+  { tier: 'C', color: '#FF6B35', label: 'Average',     tag: 'AVERAGE', desc: 'Mixed reviews — worth a careful look.', lo: '5.5', hi: '6.8', fill: '40%' },
+  { tier: 'D', color: '#EF233C', label: 'Avoid',       tag: 'AVOID',   desc: 'Recurring complaints. Due diligence strongly advised.', lo: '0',   hi: '5.5', fill: '22%' }
+];
 
 export default function LandingPage() {
   useSEO({
@@ -197,23 +205,94 @@ export default function LandingPage() {
         title="S through D — calibrated for confidence"
         intro="Raw averages lie. Each society’s score uses a Bayesian prior so a 9.8 from 5 ratings doesn’t beat a 9.3 from 1,500."
       >
-        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {Object.entries(TIER_META).map(([tier, meta], i) => (
-            <Reveal key={tier} delay={i * 0.06}>
-              <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-                <div className="flex items-center gap-3 px-5 py-4" style={{ background: `${meta.color}14` }}>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold text-white" style={{ background: meta.color }}>
-                    {tier}
+        {/* Bayesian formula chip */}
+        <Reveal delay={0.04}>
+          <div className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl border border-white/70 bg-white/80 px-4 py-3 text-sm shadow-sm backdrop-blur-md">
+            <span className="font-semibold text-ink">Score</span>
+            <span className="font-mono text-slate-700">=</span>
+            <span className="rounded-lg bg-sky-100 px-2 py-1 font-mono text-xs text-sky-900">(n × avg + W × μ) ÷ (n + W)</span>
+            <span className="text-slate-500">— pulls small-sample scores toward the global mean until enough residents vouch for them.</span>
+          </div>
+        </Reveal>
+
+        {/* Tier cards */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {TIER_ROWS.map((t, i) => (
+            <Reveal key={t.tier} delay={i * 0.06}>
+              <div
+                className="group relative h-full overflow-hidden rounded-3xl border bg-white/85 p-5 shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
+                style={{ borderColor: `${t.color}55` }}
+              >
+                {/* Tier color wash on hover */}
+                <div
+                  className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                  style={{ background: `linear-gradient(160deg, ${t.color}22, transparent 60%)` }}
+                />
+                <div className="flex items-center justify-between">
+                  <span
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl font-display text-2xl font-bold text-white shadow-sm"
+                    style={{ background: t.color }}
+                  >
+                    {t.tier}
                   </span>
-                  <div>
-                    <p className="font-display text-sm font-bold text-ink">{meta.label}</p>
-                    <p className="text-xs font-medium text-slate-500">{meta.text}</p>
+                  <span className="font-display text-[11px] font-bold uppercase tracking-wider" style={{ color: t.color }}>
+                    {t.tag}
+                  </span>
+                </div>
+                <p className="mt-4 font-display text-base font-bold text-ink">{t.label}</p>
+                <p className="mt-1 text-xs font-medium text-slate-600">{t.desc}</p>
+
+                {/* Score range bar */}
+                <div className="mt-4">
+                  <div className="flex items-center justify-between text-[10px] font-semibold text-slate-500">
+                    <span>{t.lo}</span>
+                    <span>{t.hi}</span>
+                  </div>
+                  <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+                    <div
+                      className="h-full rounded-full"
+                      style={{ width: t.fill, background: t.color }}
+                    />
                   </div>
                 </div>
               </div>
             </Reveal>
           ))}
         </div>
+
+        {/* Live proof: raw average vs confidence-adjusted score */}
+        <Reveal delay={0.1}>
+          <div className="mt-8 overflow-hidden rounded-3xl border border-white/70 bg-white/85 shadow-sm backdrop-blur-md">
+            <div className="grid gap-px bg-slate-200/70 md:grid-cols-[1.1fr_1fr_1fr]">
+              {/* Society A — few ratings, high raw avg */}
+              <div className="bg-white p-6">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Society A</p>
+                <p className="mt-1 font-display text-lg font-bold text-ink">9.8 ★ <span className="text-sm font-medium text-slate-500">· 5 ratings</span></p>
+                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                  <div className="h-full rounded-full bg-amber-400" style={{ width: '98%' }} />
+                </div>
+                <p className="mt-2 text-xs font-medium text-slate-500">Raw average — looks elite.</p>
+              </div>
+              {/* Society B — many ratings, slightly lower raw avg */}
+              <div className="bg-white p-6">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Society B</p>
+                <p className="mt-1 font-display text-lg font-bold text-ink">9.3 ★ <span className="text-sm font-medium text-slate-500">· 1,500 ratings</span></p>
+                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                  <div className="h-full rounded-full bg-emerald-500" style={{ width: '93%' }} />
+                </div>
+                <p className="mt-2 text-xs font-medium text-slate-500">Raw average — looks worse. Unfairly.</p>
+              </div>
+              {/* Verdict */}
+              <div className="bg-slate-900 p-6 text-white">
+                <p className="text-xs font-semibold uppercase tracking-wider text-white/60">After Bayesian adjustment</p>
+                <p className="mt-1 font-display text-lg font-bold">Society B wins 🏆</p>
+                <p className="mt-2 text-xs leading-relaxed text-white/75">
+                  1,500 residents carry real weight. The 9.8 from 5 ratings regresses toward the mean — too few voices, too much variance.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
       </Section>
 
       {/* ───────── Top societies (live) ───────── */}
