@@ -5,7 +5,6 @@ import {
   Star,
   ArrowUpRight,
   TrendUp,
-  Users,
   User,
   Sparkle
 } from '@phosphor-icons/react';
@@ -20,6 +19,7 @@ import Marquee from '../components/ui/Marquee.jsx';
 import Backdrop from '../components/ui/Backdrop.jsx';
 import CityVideoBackdrop from '../components/ui/CityVideoBackdrop.jsx';
 import FeaturesShowcase from '../components/landing/FeaturesShowcase.jsx';
+import SkylineDraw from '../components/landing/SkylineDraw.jsx';
 import SocietyCard from '../components/SocietyCard.jsx';
 import { useSEO } from '../utils/seo.js';
 import api from '../utils/api.js';
@@ -200,100 +200,91 @@ export default function LandingPage() {
       </Section>
 
       {/* ───────── Tier system ───────── */}
-      <Section
-        eyebrow="The tier system"
-        title="S through D — calibrated for confidence"
-        intro="Raw averages lie. Each society’s score uses a Bayesian prior so a 9.8 from 5 ratings doesn’t beat a 9.3 from 1,500."
-      >
-        {/* Bayesian formula chip */}
-        <Reveal delay={0.04}>
-          <div className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl border border-white/70 bg-white/80 px-4 py-3 text-sm shadow-sm backdrop-blur-md">
-            <span className="font-semibold text-ink">Score</span>
-            <span className="font-mono text-slate-700">=</span>
-            <span className="rounded-lg bg-sky-100 px-2 py-1 font-mono text-xs text-sky-900">(n × avg + W × μ) ÷ (n + W)</span>
-            <span className="text-slate-500">— pulls small-sample scores toward the global mean until enough residents vouch for them.</span>
-          </div>
-        </Reveal>
+      <section className="relative px-4 py-20 sm:py-28">
+        <div className="mx-auto max-w-5xl">
+          <Reveal>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-500">The tier system</p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-4 max-w-3xl font-display text-3xl font-bold leading-[1.08] tracking-tight text-ink sm:text-[2.75rem]">
+              S through D —{' '}
+              <span className="font-serif font-normal italic text-ink">calibrated for confidence</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600">
+              Raw averages lie. Each society’s score uses a Bayesian prior so a 9.8 from 5 ratings
+              doesn’t beat a 9.3 from 1,500.
+            </p>
+          </Reveal>
 
-        {/* Tier cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {TIER_ROWS.map((t, i) => (
-            <Reveal key={t.tier} delay={i * 0.06}>
-              <div
-                className="group relative h-full overflow-hidden rounded-3xl border bg-white/85 p-5 shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
-                style={{ borderColor: `${t.color}55` }}
-              >
-                {/* Tier color wash on hover */}
+          {/* Tier ladder — editorial, monochrome. Tier colour is a single hairline dot. */}
+          <Reveal delay={0.16}>
+            <div className="mt-14 divide-y divide-slate-200 border-y border-slate-200">
+              {TIER_ROWS.map((t) => (
                 <div
-                  className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                  style={{ background: `linear-gradient(160deg, ${t.color}22, transparent 60%)` }}
-                />
-                <div className="flex items-center justify-between">
-                  <span
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl font-display text-2xl font-bold text-white shadow-sm"
-                    style={{ background: t.color }}
-                  >
+                  key={t.tier}
+                  className="group grid grid-cols-[auto_1fr_auto] items-center gap-6 py-6 transition-colors hover:bg-slate-50/60 sm:grid-cols-[3.5rem_1fr_auto] sm:gap-10"
+                >
+                  <span className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
                     {t.tier}
                   </span>
-                  <span className="font-display text-[11px] font-bold uppercase tracking-wider" style={{ color: t.color }}>
-                    {t.tag}
-                  </span>
-                </div>
-                <p className="mt-4 font-display text-base font-bold text-ink">{t.label}</p>
-                <p className="mt-1 text-xs font-medium text-slate-600">{t.desc}</p>
-
-                {/* Score range bar */}
-                <div className="mt-4">
-                  <div className="flex items-center justify-between text-[10px] font-semibold text-slate-500">
-                    <span>{t.lo}</span>
-                    <span>{t.hi}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: t.color }} />
+                      <p className="font-display text-sm font-semibold text-ink sm:text-base">{t.label}</p>
+                    </div>
+                    <p className="mt-1.5 max-w-md text-sm leading-relaxed text-slate-500">{t.desc}</p>
                   </div>
-                  <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
-                    <div
-                      className="h-full rounded-full"
-                      style={{ width: t.fill, background: t.color }}
-                    />
+                  <div className="text-right">
+                    <p className="font-mono text-xs font-medium text-slate-400">score</p>
+                    <p className="font-display text-sm font-semibold text-ink">
+                      {t.lo}<span className="text-slate-300"> → </span>{t.hi}
+                    </p>
                   </div>
                 </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+              ))}
+            </div>
+          </Reveal>
 
-        {/* Live proof: raw average vs confidence-adjusted score */}
-        <Reveal delay={0.1}>
-          <div className="mt-8 overflow-hidden rounded-3xl border border-white/70 bg-white/85 shadow-sm backdrop-blur-md">
-            <div className="grid gap-px bg-slate-200/70 md:grid-cols-[1.1fr_1fr_1fr]">
-              {/* Society A — few ratings, high raw avg */}
-              <div className="bg-white p-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Society A</p>
-                <p className="mt-1 font-display text-lg font-bold text-ink">9.8 ★ <span className="text-sm font-medium text-slate-500">· 5 ratings</span></p>
-                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
-                  <div className="h-full rounded-full bg-amber-400" style={{ width: '98%' }} />
+          {/* Bayesian proof — quiet two-column comparison, no coloured bars, no emoji. */}
+          <Reveal delay={0.1}>
+            <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 md:grid-cols-2">
+              <div className="bg-white p-8">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">The trap</p>
+                <div className="mt-5 flex items-baseline gap-3">
+                  <span className="font-display text-5xl font-bold tracking-tight text-ink">9.8</span>
+                  <span className="text-sm text-slate-500">★ · 5 ratings</span>
                 </div>
-                <p className="mt-2 text-xs font-medium text-slate-500">Raw average — looks elite.</p>
-              </div>
-              {/* Society B — many ratings, slightly lower raw avg */}
-              <div className="bg-white p-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Society B</p>
-                <p className="mt-1 font-display text-lg font-bold text-ink">9.3 ★ <span className="text-sm font-medium text-slate-500">· 1,500 ratings</span></p>
-                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
-                  <div className="h-full rounded-full bg-emerald-500" style={{ width: '93%' }} />
+                <div className="mt-5 h-px w-full bg-slate-200">
+                  <div className="h-px bg-ink" style={{ width: '98%' }} />
                 </div>
-                <p className="mt-2 text-xs font-medium text-slate-500">Raw average — looks worse. Unfairly.</p>
+                <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                  A raw average this high from five people is mostly noise — one enthusiastic resident
+                  swings it by half a point.
+                </p>
               </div>
-              {/* Verdict */}
-              <div className="bg-slate-900 p-6 text-white">
-                <p className="text-xs font-semibold uppercase tracking-wider text-white/60">After Bayesian adjustment</p>
-                <p className="mt-1 font-display text-lg font-bold">Society B wins 🏆</p>
-                <p className="mt-2 text-xs leading-relaxed text-white/75">
-                  1,500 residents carry real weight. The 9.8 from 5 ratings regresses toward the mean — too few voices, too much variance.
+              <div className="bg-ink p-8 text-white">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">The verdict</p>
+                <div className="mt-5 flex items-baseline gap-3">
+                  <span className="font-display text-5xl font-bold tracking-tight">9.3</span>
+                  <span className="text-sm text-white/60">★ · 1,500 ratings</span>
+                </div>
+                <div className="mt-5 h-px w-full bg-white/15">
+                  <div className="h-px bg-white" style={{ width: '93%' }} />
+                </div>
+                <p className="mt-4 text-sm leading-relaxed text-white/70">
+                  1,500 residents carry real weight. After the prior is applied, Society B ranks higher —
+                  too few voices, too much variance.
+                </p>
+                <p className="mt-6 border-t border-white/10 pt-4 font-mono text-[11px] text-white/45">
+                  score = (n·avg + W·μ) ÷ (n + W)
                 </p>
               </div>
             </div>
-          </div>
-        </Reveal>
-      </Section>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ───────── Top societies (live) ───────── */}
       {top.length > 0 && (
@@ -323,26 +314,41 @@ export default function LandingPage() {
       {/* ───────── Final CTA ───────── */}
       <section className="relative isolate overflow-hidden bg-ink px-4 py-24 sm:py-32">
         <Backdrop dark grid noise={false} />
-        <div className="relative mx-auto max-w-2xl text-center">
-          <Users weight="duotone" className="mx-auto h-9 w-9 text-slate-300" />
-          <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Your rating moves the <em className="font-serif font-normal italic">needle</em>.
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-slate-300">
-            One rating per account per society — so the tier list reflects residents, not brokers.
-            Add your voice in under a minute.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <Magnetic>
-              <PressButton to="/societies?openRate=1" variant="primary" size="lg">
-                <Star weight="duotone" className="h-5 w-5" />
-                Rate your society
+        <div className="relative mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-[1.1fr_1fr] md:gap-20">
+          {/* Copy */}
+          <div className="text-center md:text-left">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70 backdrop-blur">
+              <Sparkle weight="duotone" className="h-3.5 w-3.5" />
+              One rating per account per society
+            </span>
+            <h2 className="mt-6 font-display text-3xl font-bold leading-[1.08] tracking-tight text-white sm:text-[2.75rem]">
+              Your rating moves the{' '}
+              <span className="font-serif font-normal italic text-white">needle</span>.
+            </h2>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-300 md:max-w-none">
+              The tier list reflects residents, not brokers. Add your voice in under a minute —
+              every score feeds a confidence-adjusted ranking that actually respects sample size.
+            </p>
+            <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row md:justify-start">
+              <Magnetic>
+                <PressButton to="/societies?openRate=1" variant="primary" size="lg">
+                  <Star weight="duotone" className="h-5 w-5" />
+                  Rate your society
+                </PressButton>
+              </Magnetic>
+              <PressButton to="/map" variant="glass" size="lg">
+                <MapTrifold weight="duotone" className="h-5 w-5" />
+                Explore the map
               </PressButton>
-            </Magnetic>
-            <PressButton to="/map" variant="glass" size="lg">
-              <MapTrifold weight="duotone" className="h-5 w-5" />
-              Explore the map
-            </PressButton>
+            </div>
+          </div>
+
+          {/* Self-drawing Gurgaon skyline — pathLength animation on scroll */}
+          <div className="relative mx-auto w-full max-w-md md:max-w-none">
+            <SkylineDraw className="h-auto w-full text-white/85" />
+            <p className="mt-4 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-white/40 md:text-left">
+              Gurgaon · sector by sector
+            </p>
           </div>
         </div>
       </section>

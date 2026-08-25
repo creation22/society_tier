@@ -21,7 +21,8 @@ module.exports = {
       fontFamily: {
         display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
         body: ['"DM Sans"', 'system-ui', 'sans-serif'],
-        serif: ['Fraunces', 'Georgia', 'serif']
+        serif: ['"Instrument Serif"', 'Fraunces', 'Georgia', 'serif'],
+        mono: ['"Space Grotesk"', 'ui-monospace', 'monospace']
       },
       borderRadius: {
         sm: '6px',
