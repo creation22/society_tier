@@ -158,7 +158,7 @@ export default function LandingPage() {
       </div>
 
       {/* ───────── Stats ───────── */}
-      <Section className="bg-cream py-14" innerClassName="">
+      <Section className="py-14" innerClassName="">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           <Reveal delay={0}><StatCounter to={1200} suffix="+" label="Societies rated" /></Reveal>
           <Reveal delay={0.08}><StatCounter to={4800} suffix="+" label="Resident ratings" accent="bg-slate-700" /></Reveal>

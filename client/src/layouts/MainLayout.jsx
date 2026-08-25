@@ -9,7 +9,12 @@ export default function MainLayout() {
   const isFullScreen = pathname === '/map';
 
   return (
-    <div className="flex min-h-screen flex-col bg-cream">
+    <div className="relative flex min-h-screen flex-col">
+      {/* Fixed sky backdrop — sits behind every page so the whole site
+          reads as one continuous sky-blue → sunlit-yellow gradient. */}
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-sky-gradient">
+        <div className="absolute inset-0 bg-sky-clouds" />
+      </div>
       <ScrollProgress />
       <Navbar />
       <main className="flex-1">

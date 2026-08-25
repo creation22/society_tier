@@ -7,7 +7,8 @@ import {
   MagnifyingGlass,
   ShieldCheck,
   MapPin,
-  Check
+  Check,
+  Sun
 } from '@phosphor-icons/react';
 import { tierColor } from '../../utils/tier.js';
 import Reveal from '../ui/Reveal.jsx';
@@ -27,10 +28,18 @@ const FEATURES = [
 
 export default function FeaturesShowcase() {
   return (
-    <section id="features" className="relative bg-cream px-4 py-16 sm:py-24">
+    <section id="features" className="relative px-4 py-16 sm:py-24">
+      {/* Sun glow + drifting cloud accents layered over the site sky backdrop */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -right-16 -top-24 h-72 w-72 rounded-full bg-yellow-200/50 blur-3xl" />
+        <div className="absolute left-1/4 top-10 h-40 w-80 rounded-full bg-white/40 blur-3xl" />
+        <div className="absolute bottom-0 right-1/3 h-44 w-96 rounded-full bg-amber-100/40 blur-3xl" />
+      </div>
+
       <div className="mx-auto max-w-7xl">
         <Reveal>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-white/70 px-3 py-1 text-xs font-semibold text-sky-800 shadow-sm backdrop-blur">
+            <Sun weight="fill" className="h-3.5 w-3.5 text-amber-500" />
             Everything you need
           </span>
         </Reveal>
@@ -40,7 +49,7 @@ export default function FeaturesShowcase() {
           </h2>
         </Reveal>
         <Reveal delay={0.12}>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-500">
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-700/90">
             From discovery to due diligence — explore the map, read real discussions, compare side by side,
             and trust a ranking that respects sample size.
           </p>
@@ -49,14 +58,14 @@ export default function FeaturesShowcase() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f, i) => (
             <Reveal key={f.title} delay={i * 0.06}>
-              <article className="group h-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg">
+              <article className="group h-full overflow-hidden rounded-3xl border border-white/70 bg-white/80 shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:border-white hover:bg-white/90 hover:shadow-xl">
                 <f.Viz />
                 <div className="p-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white transition-colors group-hover:bg-slate-700">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm transition-colors group-hover:bg-sky-600">
                     <f.icon weight="duotone" className="h-5 w-5" />
                   </div>
                   <h3 className="mt-4 font-display text-lg font-bold text-ink">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-500">{f.body}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{f.body}</p>
                 </div>
               </article>
             </Reveal>
@@ -76,7 +85,7 @@ function MapViz() {
     { x: '78%', y: '28%' }
   ];
   return (
-    <div className="relative h-32 overflow-hidden border-b border-slate-100 bg-slate-50">
+    <div className="relative h-32 overflow-hidden border-b border-white/70 bg-sky-100/60">
       <div className="absolute inset-0 bg-grid-soft opacity-70" />
       <svg className="absolute inset-0 h-full w-full text-ink/40" viewBox="0 0 100 60" preserveAspectRatio="none" fill="none">
         <motion.path
@@ -111,7 +120,7 @@ function TierBarsViz() {
   const reduce = useReducedMotion();
   const heights = [92, 74, 58, 40, 24];
   return (
-    <div className="flex h-32 items-end justify-center gap-2.5 border-b border-slate-100 bg-slate-50 px-6 pb-4 pt-3">
+    <div className="flex h-32 items-end justify-center gap-2.5 border-b border-white/70 bg-sky-100/60 px-6 pb-4 pt-3">
       {TIERS.map((t, i) => (
         <div key={t} className="flex flex-1 flex-col items-center gap-1.5">
           <div className="flex h-full w-full items-end justify-center">
@@ -140,7 +149,7 @@ function ChatsViz() {
     { x: '8%', y: '68%', w: '38%', d: 1.2 }
   ];
   return (
-    <div className="relative h-32 overflow-hidden border-b border-slate-100 bg-slate-50">
+    <div className="relative h-32 overflow-hidden border-b border-white/70 bg-sky-100/60">
       {bubbles.map((b, i) => (
         <motion.span
           key={i}
@@ -159,7 +168,7 @@ function ChatsViz() {
 function CompareViz() {
   const reduce = useReducedMotion();
   return (
-    <div className="flex h-32 flex-col justify-center gap-4 border-b border-slate-100 bg-slate-50 px-6">
+    <div className="flex h-32 flex-col justify-center gap-4 border-b border-white/70 bg-sky-100/60 px-6">
       {[
         { label: 'Camellias', pct: 94, win: true },
         { label: 'Aralias', pct: 78, win: false }
@@ -197,7 +206,7 @@ function CompareViz() {
 function SliderViz() {
   const reduce = useReducedMotion();
   return (
-    <div className="flex h-32 flex-col justify-center gap-3 border-b border-slate-100 bg-slate-50 px-6">
+    <div className="flex h-32 flex-col justify-center gap-3 border-b border-white/70 bg-sky-100/60 px-6">
       <div className="flex gap-1.5">
         {['2BHK', '3BHK', '4BHK'].map((p, i) => (
           <span
@@ -237,7 +246,7 @@ function SliderViz() {
 function ShieldViz() {
   const reduce = useReducedMotion();
   return (
-    <div className="relative flex h-32 items-center justify-center border-b border-slate-100 bg-slate-50">
+    <div className="relative flex h-32 items-center justify-center border-b border-white/70 bg-sky-100/60">
       <svg viewBox="0 0 48 56" className="h-24 text-ink" fill="none" stroke="currentColor">
         <motion.path
           d="M24 4 L42 12 V28 C42 40 33 48 24 52 C15 48 6 40 6 28 V12 Z"

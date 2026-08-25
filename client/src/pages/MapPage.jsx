@@ -19,6 +19,7 @@ const AREAS = [
 export default function MapPage() {
   const [societies, setSocieties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState('');
   const [tiers, setTiers] = useState(new Set());
   const [minRating, setMinRating] = useState(0);
   const [areas, setAreas] = useState(new Set());
@@ -32,6 +33,15 @@ export default function MapPage() {
   const listRef = useRef(null);
 
   useSEO({ title: 'Gurgaon Society Map — GurgaonFlat', path: '/map' });
+
+  // Toggle a value inside a Set-based filter state.
+  const toggle = (setter) => (value) =>
+    setter((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
 
   const params = useMemo(
     () => ({
@@ -48,10 +58,22 @@ export default function MapPage() {
 
   useEffect(() => {
     setLoading(true);
+    setFetchError('');
     api
       .get('/societies', { params })
-      .then((res) => setSocieties(res.data.items))
-      .catch(() => {})
+      .then((res) => {
+        const items = Array.isArray(res.data) ? res.data : res.data?.items;
+        setSocieties(Array.isArray(items) ? items : []);
+      })
+      .catch((e) => {
+        setSocieties([]);
+        const status = e?.response?.status;
+        setFetchError(
+          status
+            ? `Couldn't load societies (HTTP ${status}). The map is live — pins will appear once the API responds.`
+            : "Couldn't reach the API server. Start the backend (npm run dev:server) and pins will appear."
+        );
+      })
       .finally(() => setLoading(false));
   }, [params]);
 
@@ -293,13 +315,24 @@ export default function MapPage() {
         </aside>
 
         {/* ── MAP ─────────────────────────────────────────── */}
-        <div className={`${tab === 'map' ? 'block' : 'hidden'} min-h-0 flex-1 md:block`}>
+        <div className={`relative ${tab === 'map' ? 'block' : 'hidden'} min-h-0 flex-1 md:block`}>
           <MapView
             societies={sorted}
             onBoundsChange={onBoundsChange}
             selectedSlug={selected}
             onSelect={setSelected}
           />
+          {/* Explain why no pins are showing — the map itself can't tell. */}
+          {fetchError && (
+            <div className="pointer-events-none absolute left-1/2 top-20 z-20 -translate-x-1/2 rounded-2xl border border-rose-200 bg-white/95 px-4 py-3 text-center text-sm font-medium text-rose-700 shadow-lg backdrop-blur">
+              {fetchError}
+            </div>
+          )}
+          {!loading && !fetchError && sorted.length === 0 && (
+            <div className="pointer-events-none absolute left-1/2 top-20 z-20 -translate-x-1/2 rounded-2xl border border-slate-200 bg-white/95 px-4 py-3 text-center text-sm font-medium text-slate-600 shadow-lg backdrop-blur">
+              No societies match your filters — clear them to see pins on the map.
+            </div>
+          )}
         </div>
       </div>
     </div>
