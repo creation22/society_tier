@@ -31,7 +31,7 @@ export default function MapPage() {
   const debouncedSector = useDebounce(sector);
   const listRef = useRef(null);
 
-  useSEO({ title: 'Gurgaon Society Map — GurgaonFlat', path: '/' });
+  useSEO({ title: 'Gurgaon Society Map — GurgaonFlat', path: '/map' });
 
   const params = useMemo(
     () => ({
@@ -88,20 +88,20 @@ export default function MapPage() {
   return (
     <div className="flex h-[calc(100vh-64px)] flex-col">
       {/* Mobile segmented control */}
-      <div className="shrink-0 border-b-3 border-ink px-4 py-3 md:hidden">
-        <div className="grid grid-cols-2 gap-0 border-3 border-ink bg-white shadow-brutal-sm">
+      <div className="shrink-0 border-b border-slate-200 px-4 py-3 md:hidden">
+        <div className="flex rounded-full bg-slate-100 p-1">
           <button
             onClick={() => setTab('list')}
-            className={`border-r-3 border-ink py-2.5 text-sm font-bold uppercase transition-colors ${
-              tab === 'list' ? 'bg-tierS' : 'bg-white hover:bg-tierS/30'
+            className={`flex-1 rounded-full py-2 text-sm font-semibold transition-colors ${
+              tab === 'list' ? 'bg-white text-ink shadow-sm' : 'text-slate-500'
             }`}
           >
             Results ({societies.length})
           </button>
           <button
             onClick={() => setTab('map')}
-            className={`py-2.5 text-sm font-bold uppercase transition-colors ${
-              tab === 'map' ? 'bg-tierS' : 'bg-white hover:bg-tierS/30'
+            className={`flex-1 rounded-full py-2 text-sm font-semibold transition-colors ${
+              tab === 'map' ? 'bg-white text-ink shadow-sm' : 'text-slate-500'
             }`}
           >
             Map
@@ -112,19 +112,19 @@ export default function MapPage() {
       <div className="flex min-h-0 flex-1 flex-col md:flex-row">
         {/* ── SIDEBAR ─────────────────────────────────────── */}
         <aside
-          className={`${tab === 'list' ? 'block' : 'hidden'} shrink-0 overflow-y-auto border-b-3 border-ink bg-cream p-4 md:block md:w-80 md:border-b-0 md:border-r-3`}
+          className={`${tab === 'list' ? 'block' : 'hidden'} shrink-0 overflow-y-auto border-b border-slate-200 bg-white p-4 md:block md:w-80 md:border-b-0 md:border-r`}
         >
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h1 className="font-display text-2xl uppercase">Gurgaon</h1>
-              <p className="text-xs font-bold uppercase text-gray-600">
+              <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Gurgaon</h1>
+              <p className="text-xs font-medium text-slate-500">
                 {loading ? 'Loading…' : `${sorted.length} societies`}
               </p>
             </div>
             {activeFilters > 0 && (
               <button
                 onClick={clearAll}
-                className="border-3 border-ink bg-tierD px-2 py-1 text-xs font-bold uppercase text-white shadow-brutal-sm transition-all active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+                className="rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 transition-colors hover:bg-rose-100"
               >
                 Clear · {activeFilters}
               </button>
@@ -140,20 +140,22 @@ export default function MapPage() {
 
           <div className="mt-6 space-y-6">
             <div>
-              <p className="section-heading mb-2 text-sm">Tier</p>
-              <div className="flex flex-wrap gap-2">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Tier</p>
+              <div className="flex flex-wrap gap-1.5">
                 {TIERS.map((t) => {
                   const on = tiers.has(t);
                   return (
                     <button
                       key={t}
                       onClick={() => toggle(setTiers)(t)}
-                      className={`flex items-center gap-1.5 border-3 border-ink px-2.5 py-1.5 text-xs font-bold uppercase shadow-brutal-sm transition-all active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
-                        on ? 'text-ink' : 'bg-white hover:bg-tierS/30'
+                      className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold transition-colors ${
+                        on
+                          ? 'border-transparent text-white'
+                          : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                       }`}
                       style={on ? { background: tierColor(t) } : {}}
                     >
-                      {!on && <span className="h-2 w-2 border-2 border-ink" style={{ background: tierColor(t) }} />}
+                      {!on && <span className="h-2 w-2 rounded-full" style={{ background: tierColor(t) }} />}
                       {t}
                     </button>
                   );
@@ -162,14 +164,16 @@ export default function MapPage() {
             </div>
 
             <div>
-              <p className="section-heading mb-2 text-sm">Rating</p>
-              <div className="flex gap-2">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Rating</p>
+              <div className="flex flex-wrap gap-1.5">
                 {[0, 9, 8, 7].map((r) => (
                   <button
                     key={r}
                     onClick={() => setMinRating(r)}
-                    className={`border-3 border-ink px-2.5 py-1 text-xs font-bold shadow-brutal-sm transition-all active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
-                      minRating === r ? 'bg-tierS' : 'bg-white hover:bg-tierS/30'
+                    className={`rounded-full border px-2.5 py-1 text-xs font-semibold transition-colors ${
+                      minRating === r
+                        ? 'border-ink bg-ink text-white'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                     }`}
                   >
                     {r === 0 ? 'Any' : `${r}+`}
@@ -179,25 +183,25 @@ export default function MapPage() {
             </div>
 
             <div>
-              <p className="section-heading mb-2 text-sm">Area</p>
-              <div className="flex flex-col gap-2">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Area</p>
+              <div className="flex flex-col gap-1.5">
                 {AREAS.map((a) => {
                   const on = areas.has(a);
                   return (
                     <button
                       key={a}
                       onClick={() => pickArea(a)}
-                      className={`flex items-center justify-between border-3 border-ink px-3 py-2.5 text-left text-sm font-bold uppercase shadow-brutal-sm transition-all active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
-                        on ? 'bg-tierS' : 'bg-white hover:bg-tierS/30'
+                      className={`flex items-center justify-between rounded-xl border px-3 py-2 text-left text-sm font-medium transition-colors ${
+                        on ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                       }`}
                     >
                       {a}
                       <span
-                        className={`flex h-5 w-5 items-center justify-center border-2 border-ink text-[11px] ${
-                          on ? 'bg-ink text-white' : 'bg-white'
+                        className={`flex h-5 w-5 items-center justify-center rounded-md border text-[11px] ${
+                          on ? 'border-white/40 bg-white/10 text-white' : 'border-slate-300 bg-white text-transparent'
                         }`}
                       >
-                        {on ? '✓' : ''}
+                        ✓
                       </span>
                     </button>
                   );
@@ -206,7 +210,7 @@ export default function MapPage() {
             </div>
 
             <div>
-              <p className="section-heading mb-2 text-sm">More filters</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">More filters</p>
               <select value={bhk} onChange={(e) => setBhk(e.target.value)} className="field">
                 <option value="">Any BHK</option>
                 {[2, 3, 4, 5].map((n) => (
@@ -225,12 +229,12 @@ export default function MapPage() {
 
           {/* ── RESULTS ──────────────────────────────────── */}
           <div ref={listRef}>
-            <div className="mb-3 mt-6 flex items-center justify-between border-t-3 border-dashed border-ink pt-4">
-              <p className="section-heading text-sm">Results</p>
+            <div className="mb-3 mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Results</p>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="border-3 border-ink bg-white px-2 py-1 text-xs font-bold shadow-brutal-sm focus:outline-none"
+                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-ink/10"
               >
                 <option value="rating">Top rated</option>
                 <option value="reviews">Most reviewed</option>
@@ -245,7 +249,7 @@ export default function MapPage() {
                 ))}
               </div>
             ) : sorted.length === 0 ? (
-              <div className="border-3 border-dashed border-ink bg-paper p-4 text-center text-sm font-bold uppercase text-gray-500">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center text-sm font-medium text-slate-500">
                 No societies match your filters
               </div>
             ) : (
@@ -256,24 +260,24 @@ export default function MapPage() {
                     <li key={s.slug}>
                       <button
                         onClick={() => pickSociety(s.slug)}
-                        className={`flex w-full items-center gap-3 border-3 border-ink px-3 py-2.5 text-left transition-all ${
+                        className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all ${
                           isActive
-                            ? '-translate-x-[3px] -translate-y-[3px] bg-white shadow-brutal'
-                            : 'bg-paper shadow-brutal-sm hover:-translate-y-0.5 hover:shadow-brutal'
+                            ? 'border-slate-900 bg-white shadow-md ring-2 ring-ink/10'
+                            : 'border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm'
                         }`}
                       >
-                        <span className="w-5 shrink-0 text-xs font-bold text-gray-400">{i + 1}</span>
-                        <span className="h-8 w-1.5 shrink-0 border-2 border-ink" style={{ background: tierColor(s.tier) }} />
+                        <span className="w-5 shrink-0 text-xs font-bold text-slate-300">{i + 1}</span>
+                        <span className="h-8 w-1.5 shrink-0 rounded-full" style={{ background: tierColor(s.tier) }} />
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-bold">{s.name}</span>
-                          <span className="block truncate text-xs font-semibold uppercase text-gray-500">
+                          <span className="block truncate text-sm font-semibold text-ink">{s.name}</span>
+                          <span className="block truncate text-xs text-slate-500">
                             {s.sector} · {formatCount(s.ratingCount)} reviews
                           </span>
                         </span>
                         <span className="shrink-0 text-right">
-                          <span className="block text-sm font-extrabold">{formatRating(s.overallRating)}</span>
+                          <span className="block font-display text-sm font-bold text-ink">{formatRating(s.overallRating)}</span>
                           <span
-                            className="inline-block border-2 border-ink px-1 text-[10px] font-extrabold"
+                            className="mt-0.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-md px-1 text-[10px] font-bold text-white"
                             style={{ background: tierColor(s.tier) }}
                           >
                             {s.tier}

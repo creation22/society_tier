@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { TierChip } from '../components/SocietyCard.jsx';
-import { LEADERBOARD_TABS } from '../utils/tier.js';
+import { motion } from 'framer-motion';
+import { CaretUp, CaretDown, Minus, Trophy } from '@phosphor-icons/react';
+import PageHeader from '../components/ui/PageHeader.jsx';
+import Reveal from '../components/ui/Reveal.jsx';
+import EmptyState from '../components/ui/EmptyState.jsx';
+import TierBadge from '../components/ui/TierBadge.jsx';
+import { LEADERBOARD_TABS, tierColor } from '../utils/tier.js';
+import { formatCount } from '../utils/format.js';
 import api from '../utils/api.js';
 import { useSEO } from '../utils/seo.js';
+import { cn } from '../utils/cn.js';
 
 const CATEGORY_SLUGS = {
   overall: 'best-societies-gurgaon',
@@ -14,7 +21,6 @@ const CATEGORY_SLUGS = {
 export default function LeaderboardPage() {
   const params = useParams();
   const [searchParams] = useSearchParams();
-  // Support both /leaderboard?category=x and SEO URLs /rankings/:slug
   const slugToCategory = Object.fromEntries(Object.entries(CATEGORY_SLUGS).map(([k, v]) => [v, k]));
   const category =
     (params.category && slugToCategory[params.category]) || searchParams.get('category') || 'overall';
@@ -22,10 +28,11 @@ export default function LeaderboardPage() {
   const [items, setItems] = useState(null);
   const [movement, setMovement] = useState({});
 
+  const activeLabel = LEADERBOARD_TABS.find((t) => t.id === category)?.label || 'Overall';
   useSEO({
-    title: `The Gurgaon Leaderboard — ${LEADERBOARD_TABS.find((t) => t.id === category)?.label || 'Overall'} | GurgaonFlat`,
+    title: `The Gurgaon Leaderboard — ${activeLabel} | GurgaonFlat`,
     description: `Ranked list of Gurgaon societies by ${category}. Confidence-adjusted scores based on real resident ratings.`,
-    path: `/leaderboard`
+    path: '/leaderboard'
   });
 
   useEffect(() => {
@@ -35,7 +42,6 @@ export default function LeaderboardPage() {
       .then((res) => {
         const list = res.data.items;
         setItems(list);
-        // Rank-change tracking via a local snapshot (movement since last visit).
         try {
           const key = `tier-ranks:${category}`;
           const prev = JSON.parse(localStorage.getItem(key) || 'null');
@@ -56,82 +62,118 @@ export default function LeaderboardPage() {
   }, [category]);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="font-display text-4xl uppercase sm:text-6xl">The Gurgaon Leaderboard</h1>
-      <p className="mt-1 font-bold uppercase tracking-wide text-gray-600">
-        Confidence-adjusted. Resident-powered. Zero brokers.
-      </p>
+    <>
+      <PageHeader
+        eyebrow="Leaderboard"
+        title="The Gurgaon"
+        accent="Leaderboard."
+        intro="Confidence-adjusted. Resident-powered. Zero brokers. A Bayesian prior keeps 1,500 ratings honest against 5."
+        crumbs={[{ label: 'Home', to: '/' }, { label: 'Leaderboard' }]}
+      />
 
-      {/* Tabs */}
-      <div className="mt-6 flex flex-wrap gap-2 border-b-3 border-ink pb-4">
-        {LEADERBOARD_TABS.map((t) => (
-          <Link
-            key={t.id}
-            to={t.id === 'overall' ? '/leaderboard' : `/leaderboard?category=${t.id}`}
-            className={`border-3 border-ink px-3 py-1.5 text-xs font-bold uppercase shadow-brutal-sm transition-colors ${
-              category === t.id ? 'bg-tierS' : 'bg-white hover:bg-tierS/40'
-            }`}
-          >
-            {t.label}
-          </Link>
-        ))}
-      </div>
-
-      {/* Rows */}
-      {!items ? (
-        <div className="mt-8 space-y-3">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-14 animate-pulse border-3 border-ink bg-ink/10" />
+      <section className="mx-auto max-w-5xl px-4 py-12">
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-1.5 border-b border-slate-200 pb-5">
+          {LEADERBOARD_TABS.map((t) => (
+            <Link
+              key={t.id}
+              to={t.id === 'overall' ? '/leaderboard' : `/leaderboard?category=${t.id}`}
+              className={cn(
+                'rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors',
+                category === t.id
+                  ? 'bg-slate-900 text-white'
+                  : 'text-slate-500 hover:bg-slate-100 hover:text-ink'
+              )}
+            >
+              {t.label}
+            </Link>
           ))}
         </div>
-      ) : items.length === 0 ? (
-        <div className="mt-8 border-3 border-dashed border-ink p-10 text-center font-bold uppercase text-gray-600">
-          No societies have enough ratings yet. Be the first to rate.
+
+        {/* Rows */}
+        <div className="mt-8">
+          {!items ? (
+            <div className="space-y-3">
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-16 animate-pulse rounded-2xl border border-slate-200 bg-slate-100/70"
+                  style={{ animationDelay: `${i * 80}ms` }}
+                />
+              ))}
+            </div>
+          ) : items.length === 0 ? (
+            <EmptyState
+              icon={Trophy}
+              title="No societies ranked yet"
+              description="There isn’t enough resident data for this category. Be the first to rate your society and move the needle."
+            />
+          ) : (
+            <ol className="space-y-3">
+              {items.map((s, i) => (
+                <Reveal key={s.slug} delay={Math.min(i * 0.04, 0.3)}>
+                  <LeaderRow rank={i + 1} society={s} movement={movement[s.slug]} />
+                </Reveal>
+              ))}
+            </ol>
+          )}
         </div>
-      ) : (
-        <ol className="mt-8 space-y-3">
-          {items.map((s, i) => (
-            <LeaderRow key={s.slug} rank={i + 1} society={s} movement={movement[s.slug]} />
-          ))}
-        </ol>
-      )}
-    </div>
+      </section>
+    </>
   );
 }
 
 function Movement({ delta }) {
   if (delta == null || delta === 0)
-    return <span title="No change" className="font-display">—</span>;
-  if (delta > 0) return <span title={`Up ${delta}`} className="font-display text-green-700">↑{delta}</span>;
-  return <span title={`Down ${-delta}`} className="font-display text-red-600">↓{-delta}</span>;
+    return <span title="No change" className="flex items-center text-xs font-semibold text-slate-400"><Minus weight="bold" className="h-3.5 w-3.5" /></span>;
+  if (delta > 0)
+    return <span title={`Up ${delta}`} className="flex items-center gap-0.5 text-xs font-bold text-emerald-600"><CaretUp weight="fill" className="h-3.5 w-3.5" />{delta}</span>;
+  return <span title={`Down ${-delta}`} className="flex items-center gap-0.5 text-xs font-bold text-rose-600"><CaretDown weight="fill" className="h-3.5 w-3.5" />{-delta}</span>;
 }
 
 function LeaderRow({ rank, society: s, movement }) {
-  function onTilt(e) {
-    const el = e.currentTarget;
-    const x = (e.clientX - el.getBoundingClientRect().left) / el.offsetWidth - 0.5;
-    el.style.transform = `perspective(800px) rotateY(${x * 3}deg) translateX(4px)`;
-  }
+  const score = Number(s.score).toFixed(1);
+  const pct = Math.min(100, (Number(s.score) / 10) * 100);
+  const podium = rank <= 3;
   return (
     <li>
       <Link
         to={`/society/${s.slug}`}
-        onMouseMove={onTilt}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = '')}
-        className={`flex items-center gap-3 border-3 border-ink px-4 py-3 shadow-brutal transition-transform ${
-          rank <= 3 ? ['bg-tierS', 'bg-tierA', 'bg-tierB text-white'][rank - 1] : 'bg-paper'
-        }`}
+        className={cn(
+          'group flex items-center gap-4 rounded-2xl border bg-white px-4 py-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md',
+          podium ? 'border-slate-300' : 'border-slate-200 hover:border-slate-300'
+        )}
       >
-        <span className={`w-10 shrink-0 font-display text-xl ${rank === 1 ? 'text-2xl' : ''}`}>#{rank}</span>
-        <span className="min-w-0 flex-1">
-          <span className="block truncate font-display uppercase leading-tight">{s.name}</span>
-          <span className={`text-xs font-bold uppercase ${rank <= 3 && rank !== 2 ? 'opacity-80' : 'text-gray-600'}`}>
-            {s.sector}{s.area ? ` · ${s.area}` : ''} · {s.ratingCount.toLocaleString()} ratings
-          </span>
+        <span
+          className={cn(
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-display text-base font-bold',
+            rank === 1
+              ? 'bg-amber-400 text-white'
+              : rank === 2
+                ? 'bg-slate-300 text-slate-900'
+                : rank === 3
+                  ? 'bg-amber-700 text-white'
+                  : 'bg-slate-100 text-slate-500'
+          )}
+        >
+          {rank}
         </span>
-        <Movement delta={movement[s.slug]} />
-        <span className="hidden w-12 text-right font-display text-lg sm:block">{Number(s.score).toFixed(1)}</span>
-        <TierChip tier={s.tier} />
+
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-display font-bold text-ink">{s.name}</p>
+          <p className="mt-0.5 truncate text-xs font-medium text-slate-500">
+            {s.sector}{s.area ? ` · ${s.area}` : ''} · {formatCount(s.ratingCount)} ratings
+          </p>
+          <div className="mt-2 hidden h-1.5 w-full max-w-[200px] overflow-hidden rounded-full bg-slate-100 sm:block">
+            <div className="h-full rounded-full" style={{ width: `${pct}%`, background: tierColor(s.tier) }} />
+          </div>
+        </div>
+
+        <div className="hidden w-16 shrink-0 text-right sm:block">
+          <Movement delta={movement} />
+        </div>
+        <span className="w-14 shrink-0 text-right font-display text-xl font-bold text-ink">{score}</span>
+        <TierBadge tier={s.tier} />
       </Link>
     </li>
   );

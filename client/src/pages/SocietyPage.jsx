@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Star, ArrowsLeftRight, MapPin, Buildings, Tag } from '@phosphor-icons/react';
 import { TierChip } from '../components/SocietyCard.jsx';
 import RatingBars from '../components/RatingBars.jsx';
 import RatingModal from '../components/RatingModal.jsx';
@@ -10,6 +11,10 @@ import AqiWidget from '../components/AqiWidget.jsx';
 import api from '../utils/api.js';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { useSEO } from '../utils/seo.js';
+import Backdrop from '../components/ui/Backdrop.jsx';
+import Reveal from '../components/ui/Reveal.jsx';
+import EmptyState from '../components/ui/EmptyState.jsx';
+import SectionDivider from '../components/ui/SectionDivider.jsx';
 
 export default function SocietyPage() {
   const { slug } = useParams();
@@ -43,18 +48,22 @@ export default function SocietyPage() {
 
   if (notFound) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <h1 className="font-display text-4xl uppercase">Society not found</h1>
-        <Link to="/societies" className="brutal-btn mt-6 bg-tierS">Browse all societies</Link>
+      <div className="mx-auto max-w-3xl px-4 py-24">
+        <EmptyState
+          title="Society not found"
+          description="We couldn't find a society at this address."
+          icon={Buildings}
+          action={<Link to="/societies" className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink underline underline-offset-4">Browse all societies</Link>}
+        />
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="mx-auto max-w-7xl animate-pulse space-y-6 px-4 py-12">
-        <div className="h-40 border-3 border-ink bg-ink/10" />
-        <div className="h-96 border-3 border-ink bg-ink/10" />
+      <div className="mx-auto max-w-7xl space-y-6 px-4 py-12">
+        <div className="h-40 rounded-2xl border border-slate-200 bg-slate-100/70 animate-pulse" />
+        <div className="h-96 rounded-2xl border border-slate-200 bg-slate-100/70 animate-pulse" />
       </div>
     );
   }
@@ -63,67 +72,139 @@ export default function SocietyPage() {
 
   return (
     <>
-      {/* ── HEADER ─────────────────────────────────────────── */}
-      <section className="border-b-3 border-ink bg-paper">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[1fr_420px]">
+      {/* ── HEADER BAND ────────────────────────────────────── */}
+      <section className="relative isolate overflow-hidden bg-white">
+        <Backdrop orbs />
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:py-20 lg:grid-cols-[1fr_420px]">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-600">
-              {s.sector}, Gurgaon{s.area ? ` · ${s.area}` : ''}
-            </p>
-            <h1 className="mt-2 font-display text-4xl uppercase leading-none sm:text-6xl">{s.name}</h1>
-            {s.builder && (
-              <p className="mt-2 text-sm font-bold uppercase text-gray-600">
-                by {s.builder}
-                {s.pricePerSqft ? ` · ~₹${s.pricePerSqft.toLocaleString('en-IN')}/sqft` : ''}
-                {s.bhkOptions?.length ? ` · ${s.bhkOptions.join(', ')} BHK` : ''}
-              </p>
-            )}
-            {s.description && <p className="mt-3 max-w-xl text-gray-700">{s.description}</p>}
+            <Reveal>
+              <nav className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-slate-400">
+                <Link to="/societies" className="inline-flex items-center gap-1 transition-colors hover:text-ink">
+                  <ArrowsLeftRight weight="bold" className="h-3 w-3" /> Societies
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="inline-flex items-center gap-1 text-slate-600">
+                  <MapPin weight="fill" className="h-3 w-3" />
+                  {s.sector}, Gurgaon{s.area ? ` · ${s.area}` : ''}
+                </span>
+              </nav>
+            </Reveal>
 
-            <div className="mt-5 flex flex-wrap items-center gap-4">
-              <span className="border-4 border-ink bg-tierS px-4 py-1 font-display text-4xl shadow-brutal">
-                {Number(s.overallRating).toFixed(1)} ★
-              </span>
-              <TierChip tier={s.tier} size="lg" />
-              <div className="text-sm font-bold uppercase leading-tight text-gray-600">
-                <p>{Number(s.rankingScore).toFixed(1)} ranking score</p>
-                <p>{Number(s.ratingCount).toLocaleString()} ratings</p>
+            <Reveal delay={0.05}>
+              <p className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
+                <Tag weight="bold" className="h-3.5 w-3.5" /> Gurgaon Society
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl">
+                {s.name}
+              </h1>
+            </Reveal>
+
+            {s.builder && (
+              <Reveal delay={0.14}>
+                <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 text-sm font-medium text-slate-500">
+                  <Buildings weight="duotone" className="h-4 w-4" />
+                  by {s.builder}
+                  {s.pricePerSqft ? <span className="text-slate-300">·</span> : null}
+                  {s.pricePerSqft ? <span>~₹{s.pricePerSqft.toLocaleString('en-IN')}/sqft</span> : null}
+                  {s.bhkOptions?.length ? <span className="text-slate-300">·</span> : null}
+                  {s.bhkOptions?.length ? <span>{s.bhkOptions.join(', ')} BHK</span> : null}
+                </p>
+              </Reveal>
+            )}
+
+            {s.description && (
+              <Reveal delay={0.18}>
+                <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-600">{s.description}</p>
+              </Reveal>
+            )}
+
+            {/* Score + tier */}
+            <Reveal delay={0.22}>
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <span className="inline-flex items-baseline gap-1 rounded-2xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
+                  <Star weight="fill" className="h-6 w-6 self-center text-amber-400" />
+                  <span className="font-display text-4xl font-bold tracking-tight text-ink">{Number(s.overallRating).toFixed(1)}</span>
+                  <span className="text-sm font-medium text-slate-400">/10</span>
+                </span>
+                <TierChip tier={s.tier} size="lg" />
+                <div className="text-sm font-medium leading-tight text-slate-500">
+                  <p>{Number(s.rankingScore).toFixed(1)} ranking score</p>
+                  <p>{Number(s.ratingCount).toLocaleString()} ratings</p>
+                </div>
               </div>
-              <div className="flex w-full flex-wrap gap-3 sm:w-auto">
-                <button onClick={() => setRateOpen(true)} className="brutal-btn flex-1 bg-tierA sm:flex-none">
-                  Rate This Society ★
+            </Reveal>
+
+            {/* Actions */}
+            <Reveal delay={0.26}>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  onClick={() => setRateOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-md"
+                >
+                  <Star weight="fill" className="h-4 w-4" /> Rate This Society
                 </button>
-                <Link to={`/compare?a=${s.slug}`} className="brutal-btn flex-1 bg-white sm:flex-none">
-                  Compare ⇄
+                <Link
+                  to={`/compare?a=${s.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+                >
+                  <ArrowsLeftRight weight="duotone" className="h-4 w-4" /> Compare
                 </Link>
               </div>
+            </Reveal>
+
+            <div className="mt-6">
+              <AqiWidget />
             </div>
-
-            <AqiWidget />
           </div>
 
-          <div className="h-72 border-3 border-ink shadow-brutal lg:h-full lg:min-h-[280px]">
-            <MapView societies={[s]} />
-          </div>
+          {/* Map */}
+          <Reveal delay={0.2} className="lg:h-full">
+            <div className="h-72 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:h-full lg:min-h-[320px]">
+              <MapView societies={[s]} />
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── RATING BREAKDOWN ───────────────────────────────── */}
-      <section className="border-b-3 border-ink bg-cream">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <h2 className="mb-6 font-display text-2xl uppercase sm:text-3xl">The Breakdown</h2>
-          <RatingBars categoryScores={s.categoryScores instanceof Map ? Object.fromEntries(s.categoryScores) : s.categoryScores || {}} overall={s.overallRating} ratingCount={s.ratingCount} />
+      <section className="bg-cream">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
+          <Reveal>
+            <header className="mb-8 max-w-3xl">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">Breakdown</span>
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                The <em className="font-serif font-normal italic">breakdown</em>
+              </h2>
+              <p className="mt-3 text-lg leading-relaxed text-slate-500">How residents score this society across every category.</p>
+            </header>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <RatingBars categoryScores={s.categoryScores instanceof Map ? Object.fromEntries(s.categoryScores) : s.categoryScores || {}} overall={s.overallRating} ratingCount={s.ratingCount} />
+          </Reveal>
         </div>
       </section>
 
       {/* ── SIMILAR ────────────────────────────────────────── */}
       {data.similar.length > 0 && (
-        <section className="border-b-3 border-ink bg-paper">
-          <div className="mx-auto max-w-7xl px-4 py-10">
-            <h2 className="mb-5 font-display text-2xl uppercase sm:text-3xl">Nearby & Similar</h2>
+        <section className="bg-white">
+          <SectionDivider />
+          <div className="mx-auto max-w-7xl px-4 pb-20">
+            <Reveal>
+              <header className="mb-8 max-w-3xl">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">Around here</span>
+                <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                  Nearby & <em className="font-serif font-normal italic">similar</em>
+                </h2>
+              </header>
+            </Reveal>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {data.similar.map((sim) => (
-                <SocietyCard key={sim.slug} society={sim} />
+              {data.similar.map((sim, i) => (
+                <Reveal key={sim.slug} delay={Math.min(i * 0.05, 0.3)}>
+                  <SocietyCard society={sim} />
+                </Reveal>
               ))}
             </div>
           </div>
@@ -131,8 +212,16 @@ export default function SocietyPage() {
       )}
 
       {/* ── COMMENTS ───────────────────────────────────────── */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-4xl px-4 py-10">
+      <section className="border-t border-slate-200 bg-cream">
+        <div className="mx-auto max-w-4xl px-4 py-16 sm:py-20">
+          <Reveal>
+            <header className="mb-8">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">Community</span>
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                Resident <em className="font-serif font-normal italic">reviews</em>
+              </h2>
+            </header>
+          </Reveal>
           <CommentsSection societySlug={slug} user={user} />
         </div>
       </section>

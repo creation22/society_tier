@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import MainLayout from './layouts/MainLayout.jsx';
+import LandingPage from './pages/LandingPage.jsx';
 import MapPage from './pages/MapPage.jsx';
 import SocietyPage from './pages/SocietyPage.jsx';
 import LeaderboardPage from './pages/LeaderboardPage.jsx';
@@ -28,7 +29,8 @@ export default function App() {
       <ScrollToTop />
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<MapPage />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/map" element={<MapPage />} />
           <Route path="/society/:slug" element={<SocietyPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/rankings/:category" element={<LeaderboardPage />} />

@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import SocietyCard, { TierChip } from '../components/SocietyCard.jsx';
+import { MapPin, Compass, ArrowRight } from '@phosphor-icons/react';
+import SocietyCard from '../components/SocietyCard.jsx';
 import MapView from '../components/MapView.jsx';
 import api from '../utils/api.js';
+import PageHeader from '../components/ui/PageHeader.jsx';
+import Reveal from '../components/ui/Reveal.jsx';
+import EmptyState from '../components/ui/EmptyState.jsx';
 import { useSEO } from '../utils/seo.js';
 
 export default function AreaPage() {
@@ -23,46 +27,70 @@ export default function AreaPage() {
       .catch(() => setData({ error: true }));
   }, [area]);
 
-  if (!data) return <div className="mx-auto max-w-7xl animate-pulse px-4 py-10"><div className="h-96 border-3 border-ink bg-ink/10" /></div>;
+  if (!data) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-10">
+        <div className="h-96 rounded-2xl border border-slate-200 bg-slate-100/70 animate-pulse" />
+      </div>
+    );
+  }
+
   if (data.error) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <h1 className="font-display text-3xl uppercase">Area not found</h1>
-        <Link to="/societies" className="brutal-btn mt-4 bg-tierS">All Societies</Link>
+      <div className="mx-auto max-w-3xl px-4 py-24">
+        <EmptyState
+          icon={Compass}
+          title="Area not found"
+          description="We could not find that area. Browse all Gurgaon societies instead."
+          action={
+            <Link
+              to="/societies"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              All societies
+              <ArrowRight weight="bold" className="h-4 w-4" />
+            </Link>
+          }
+        />
       </div>
     );
   }
 
   return (
     <>
-      <section className="border-b-3 border-ink bg-tierS">
-        <div className="mx-auto flex flex-wrap items-end gap-4 px-4 py-10">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em]">Area Ranking</p>
-            <h1 className="font-display text-4xl uppercase sm:text-6xl">{data.area}</h1>
-            <p className="mt-1 font-bold uppercase">{data.count} societies · ranked by residents</p>
-          </div>
-          <div className="ml-auto h-40 w-full border-3 border-ink bg-paper shadow-brutal sm:w-96">
+      <PageHeader
+        crumbs={[{ label: 'Home', to: '/' }, { label: 'Areas', to: '/societies' }, { label: data.area }]}
+        eyebrow="Area ranking"
+        title={data.area}
+        accent="ranked"
+        intro={`${data.count} societies in ${data.area}, Gurgaon — ranked by the people who actually live there.`}
+      />
+
+      {/* Map */}
+      <section className="mx-auto max-w-7xl px-4 pb-2">
+        <Reveal>
+          <div className="h-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm sm:h-80 lg:h-96">
             <MapView societies={data.items.slice(0, 30)} />
           </div>
-        </div>
+        </Reveal>
       </section>
 
-      <ol className="mx-auto max-w-5xl space-y-3 px-4 py-10">
-        {data.items.map((s) => (
-          <li key={s.slug}>
-            <Link to={`/society/${s.slug}`} className="flex items-center gap-3 border-3 border-ink bg-paper px-4 py-3 shadow-brutal-sm hover:-translate-y-0.5 hover:shadow-brutal">
-              <span className="w-12 font-display text-xl">{`#${s.rank}`}</span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate font-display uppercase">{s.name}</span>
-                <span className="text-xs font-bold uppercase text-gray-600">{s.builder || ''} {s.sector}</span>
-              </span>
-              <span className="hidden w-14 text-right font-display text-lg sm:block">{Number(s.overallRating).toFixed(1)}</span>
-              <TierChip tier={s.tier} />
-            </Link>
-          </li>
-        ))}
-      </ol>
+      {/* Ranked list */}
+      <section className="mx-auto max-w-5xl px-4 py-12">
+        <div className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <MapPin weight="duotone" className="h-4 w-4" />
+          Ranked by overall resident rating
+        </div>
+        <ol className="space-y-3">
+          {data.items.map((s) => (
+            <li key={s.slug}>
+              <Reveal y={16}>
+                <SocietyCard society={s} rank={s.rank} />
+              </Reveal>
+            </li>
+          ))}
+        </ol>
+      </section>
     </>
   );
 }

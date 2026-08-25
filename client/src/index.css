@@ -10,66 +10,122 @@
     @apply bg-cream text-ink font-body antialiased;
   }
   ::selection {
-    @apply bg-tierS text-ink;
+    @apply bg-ink text-white;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink/70 ring-offset-2 ring-offset-white;
   }
 }
 
 @layer components {
-  .brutal-card {
-    @apply border-3 border-ink bg-paper shadow-brutal;
+  /* Shared component classes — legacy *brutal* names kept as clean aliases. */
+  .brutal-card,
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm;
   }
-  .brutal-btn {
-    @apply inline-flex items-center justify-center gap-2 border-3 border-ink bg-white px-5 py-2.5 font-bold uppercase tracking-wide shadow-brutal-sm transition-all duration-100 hover:shadow-brutal active:translate-x-[3px] active:translate-y-[3px] active:shadow-none;
+  .brutal-btn,
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-150 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/70;
   }
   .tier-chip {
-    @apply inline-flex h-8 w-8 items-center justify-center border-3 border-ink font-display text-sm leading-none shadow-brutal-sm;
+    @apply inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-md px-1.5 text-xs font-bold leading-none text-white;
   }
   .section-heading {
-    @apply font-display uppercase tracking-tight;
+    @apply font-display font-bold tracking-tight text-slate-900;
   }
-  .field {
-    @apply w-full border-3 border-ink bg-white px-3.5 py-2.5 text-sm font-semibold outline-none transition focus:shadow-brutal-sm;
+  .field,
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:border-ink focus:ring-2 focus:ring-ink/15;
   }
 }
 
-/* Brutal scrollbar */
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-::-webkit-scrollbar-track {
-  background: #f5f1e8;
-}
-::-webkit-scrollbar-thumb {
-  background: #0a0a0a;
-  border: 3px solid #f5f1e8;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #6c2bd9;
-}
+/* Soft scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #fafaf9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; border: 2px solid #fafaf9; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* Rating bar fill animation */
-.rating-bar-fill {
-  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-}
+.rating-bar-fill { transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
 
-/* Dot-grid paper texture */
+/* ───────── Premium backdrops (grayscale, no AI-slop hues) ───────── */
+
+.bg-grid-soft,
 .bg-dotgrid {
-  background-image: radial-gradient(#0a0a0a1f 1.5px, transparent 1.5px);
-  background-size: 22px 22px;
+  background-image:
+    linear-gradient(to right, rgb(10 10 10 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(10 10 10 / 0.045) 1px, transparent 1px);
+  background-size: 34px 34px;
 }
+.bg-grid-soft-dark,
 .bg-dotgrid-light {
-  background-image: radial-gradient(#f5f1e81f 1.5px, transparent 1.5px);
-  background-size: 22px 22px;
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.bg-stripes {
+  background-image: radial-gradient(rgb(10 10 10 / 0.10) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
-/* Diagonal hazard stripes */
-.bg-stripes {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    #0a0a0a 0,
-    #0a0a0a 12px,
-    #ffd60a 12px,
-    #ffd60a 24px
-  );
+/* Soft radial spotlight used behind hero content. */
+.bg-spotlight {
+  background:
+    radial-gradient(55% 50% at 50% 0%, rgb(10 10 10 / 0.06), transparent 70%),
+    radial-gradient(40% 40% at 88% 18%, rgb(10 10 10 / 0.04), transparent 70%);
+}
+
+/* Layered grayscale mesh — premium aurora-less backdrop. */
+.bg-mesh {
+  background-color: #fafaf9;
+  background-image:
+    radial-gradient(at 18% 12%, rgb(10 10 10 / 0.05) 0px, transparent 50%),
+    radial-gradient(at 82% 8%, rgb(10 10 10 / 0.04) 0px, transparent 50%),
+    radial-gradient(at 75% 92%, rgb(10 10 10 / 0.05) 0px, transparent 50%),
+    radial-gradient(at 12% 88%, rgb(10 10 10 / 0.03) 0px, transparent 50%);
+}
+.bg-mesh-dark {
+  background-color: #0A0A0A;
+  background-image:
+    radial-gradient(at 20% 15%, rgb(255 255 255 / 0.07) 0px, transparent 50%),
+    radial-gradient(at 80% 10%, rgb(255 255 255 / 0.05) 0px, transparent 50%),
+    radial-gradient(at 72% 90%, rgb(255 255 255 / 0.06) 0px, transparent 50%),
+    radial-gradient(at 14% 85%, rgb(255 255 255 / 0.04) 0px, transparent 50%);
+}
+
+/* Subtle film-grain noise overlay (SVG fractal noise). */
+.bg-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Marquee + float keyframes (registered here so inline `animation` works). */
+@keyframes nbmarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes nb-spin { to { transform: rotate(360deg); } }
+
+/* Bird flight — cross-screen glide. */
+@keyframes nb-fly {
+  from { transform: translateX(-12vw) translateY(0); }
+  50% { transform: translateX(50vw) translateY(-14px); }
+  to { transform: translateX(118vw) translateY(0); }
+}
+@keyframes nb-fly-rev {
+  from { transform: translateX(118vw) translateY(0) scaleX(-1); }
+  50% { transform: translateX(50vw) translateY(-14px) scaleX(-1); }
+  to { transform: translateX(-12vw) translateY(0) scaleX(-1); }
+}
+/* Wing flap. */
+@keyframes nb-flap { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(0.45); } }
+
+.animate-bob { animation: bob 6s ease-in-out infinite; }
+.animate-nb-spin { animation: nb-spin 18s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bob, .animate-nb-spin { animation: none; }
+  html { scroll-behavior: auto; }
 }

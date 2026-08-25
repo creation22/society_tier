@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Star } from '@phosphor-icons/react';
+import { cn } from '../utils/cn.js';
 
 /**
  * 5-star display widget mapping to the internal 1-10 scale
@@ -21,24 +23,26 @@ export default function StarRating({ value = 0, onChange, size = 'text-2xl' }) {
             aria-label={`${star} stars`}
             onMouseEnter={() => onChange && setHover(star * 2)}
             onClick={() => onChange && onChange(star * 2)}
-            className={`relative leading-none transition-transform duration-100 ${size} ${
+            className={cn(
+              'relative leading-none transition-transform duration-100 text-amber-400',
+              size,
               onChange ? 'cursor-pointer hover:scale-110' : 'cursor-default'
-            }`}
+            )}
           >
-            <span className="text-gray-300">★</span>
+            <Star weight="regular" className="text-slate-200" />
             {(filled || half) && (
               <span
-                className="absolute inset-0 overflow-hidden text-tierS"
+                className="absolute inset-0 overflow-hidden text-amber-400"
                 style={{ width: half ? '50%' : '100%' }}
               >
-                ★
+                <Star weight="fill" />
               </span>
             )}
           </button>
         );
       })}
       {onChange && (
-        <span className="ml-2 w-8 font-display text-lg">{display}</span>
+        <span className="ml-2 w-8 font-display text-lg font-semibold text-ink">{display}</span>
       )}
     </div>
   );

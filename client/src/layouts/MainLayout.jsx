@@ -1,22 +1,21 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
-import SupportButton from '../components/SupportButton.jsx';
-import ShareButton from '../components/ShareButton.jsx';
+import ScrollProgress from '../components/ui/ScrollProgress.jsx';
 
 export default function MainLayout() {
   const { pathname } = useLocation();
-  const isFullScreen = pathname === '/';
+  // Map is a full-screen workspace — no global footer there.
+  const isFullScreen = pathname === '/map';
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-cream">
+      <ScrollProgress />
       <Navbar />
       <main className="flex-1">
         <Outlet />
       </main>
       {!isFullScreen && <Footer />}
-      <ShareButton />
-      <SupportButton />
     </div>
   );
 }

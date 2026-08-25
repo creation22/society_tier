@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MapPin } from '@phosphor-icons/react';
 import { loadGoogleMaps, isMapsConfigured } from '../utils/loadGoogleMaps.js';
 import { TIER_META, tierColor } from '../utils/tier.js';
 import { formatCount, formatRating } from '../utils/format.js';
@@ -150,17 +151,17 @@ function injectInfoWindowCss() {
     .gm-style .gm-style-iw-c{padding:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
     .gm-style .gm-style-iw-t::after{display:none!important}
     .gm-style .gm-style-iw-d{overflow:hidden!important}
-    .gm-style .gm-ui-hover-effect{top:6px!important;right:6px!important;width:24px!important;height:24px!important;border:2px solid #0A0A0A!important;background:#fff!important;box-shadow:2px 2px 0 0 #0A0A0A!important;z-index:2}
-    .st-iw{min-width:230px;max-width:264px;background:#fff;border:3px solid #0A0A0A;box-shadow:6px 6px 0 0 #0A0A0A;font-family:'Space Grotesk',system-ui,sans-serif}
-    .st-iw-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:3px solid #0A0A0A}
-    .st-iw-name{font-weight:800;font-size:13px;line-height:1.2;text-transform:uppercase}
-    .st-iw-chip{flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border:2px solid #0A0A0A;background:#fff;color:#0A0A0A}
-    .st-iw-body{padding:12px}
-    .st-iw-rating{font-size:22px;font-weight:800;color:#0A0A0A;line-height:1}
-    .st-iw-rating small{font-size:13px;margin-left:2px}
-    .st-iw-meta{margin-top:5px;font-size:11px;font-weight:700;text-transform:uppercase;color:#555}
-    .st-iw-btn{display:block;text-align:center;margin-top:10px;padding:8px 10px;border:3px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;text-decoration:none;box-shadow:3px 3px 0 0 #6C2BD9;transition:transform .1s,box-shadow .1s}
-    .st-iw-btn:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 0 #6C2BD9}
+    .gm-style .gm-ui-hover-effect{top:8px!important;right:8px!important;width:26px!important;height:26px!important;border:1px solid #e2e8f0!important;background:#fff!important;border-radius:9999px!important;box-shadow:0 1px 3px rgba(10,10,10,.12)!important;z-index:2}
+    .st-iw{min-width:240px;max-width:268px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 12px 32px -8px rgba(10,10,10,.22),0 2px 6px -2px rgba(10,10,10,.08);font-family:'DM Sans',system-ui,sans-serif;overflow:hidden}
+    .st-iw-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid #f1f5f9}
+    .st-iw-name{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;font-size:14px;line-height:1.2;color:#0A0A0A}
+    .st-iw-chip{flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.02em;padding:3px 8px;border-radius:8px;color:#fff}
+    .st-iw-body{padding:14px}
+    .st-iw-rating{font-family:'Space Grotesk',system-ui,sans-serif;font-size:24px;font-weight:700;color:#0A0A0A;line-height:1}
+    .st-iw-rating small{font-size:13px;margin-left:2px;color:#64748b}
+    .st-iw-meta{margin-top:6px;font-size:11px;font-weight:600;color:#64748b}
+    .st-iw-btn{display:block;text-align:center;margin-top:12px;padding:9px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:700;text-decoration:none;border-radius:10px;transition:transform .12s,box-shadow .12s}
+    .st-iw-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px -4px rgba(10,10,10,.30)}
   `;
   document.head.appendChild(style);
 }
@@ -377,22 +378,25 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
 
   if (error) {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center border-3 border-ink bg-cream p-8 text-center">
-        <div className="mb-3 inline-block border-3 border-ink bg-tierS px-3 py-1 font-display shadow-brutal-sm">MAP OFFLINE</div>
-        <p className="max-w-md font-bold uppercase text-gray-700">
+      <div className="flex h-full w-full flex-col items-center justify-center bg-cream p-8 text-center">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white">
+          <MapPin weight="duotone" className="h-6 w-6" />
+        </div>
+        <p className="font-display text-lg font-bold text-ink">Map offline</p>
+        <p className="mt-1 max-w-md text-sm font-medium text-slate-500">
           {error === 'no-key'
             ? 'Set VITE_GOOGLE_MAPS_API_KEY in client/.env to enable the live Gurgaon map.'
             : 'Google Maps failed to load. Check your API key and billing settings.'}
         </p>
-        <div className="mt-4 grid w-full max-w-sm gap-2">
+        <div className="mt-5 grid w-full max-w-sm gap-2">
           {(societies || []).slice(0, 6).map((s) => (
             <button
               key={s.slug}
               onClick={() => navigate(`/society/${s.slug}`)}
-              className="flex items-center justify-between border-3 border-ink bg-paper px-3 py-2 shadow-brutal-sm hover:bg-tierS"
+              className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
             >
-              <span className="font-bold">{s.name}</span>
-              <span className="text-sm">{formatRating(s.overallRating)} ★ · {s.tier}</span>
+              <span className="font-semibold text-ink">{s.name}</span>
+              <span className="text-slate-500">{formatRating(s.overallRating)} ★ · {s.tier}</span>
             </button>
           ))}
         </div>
@@ -403,22 +407,24 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
   return (
     <div className="relative h-full w-full">
       {/* Dedicated div owned by Google Maps — React must never render children into it. */}
-      <div className="h-full w-full border-3 border-ink" ref={containerRef} />
+      <div className="h-full w-full" ref={containerRef} />
 
       {!ready && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-cream">
-          <span className="animate-pulse border-3 border-ink bg-tierS px-3 py-1 font-display">LOADING MAP…</span>
+          <span className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 shadow-sm animate-pulse">
+            Loading map…
+          </span>
         </div>
       )}
 
       {ready && (
         <>
           {/* Tier legend */}
-          <div className="absolute top-4 left-4 z-10 hidden flex-col gap-1.5 border-3 border-ink bg-cream p-3 shadow-brutal-sm sm:flex">
+          <div className="absolute left-4 top-4 z-10 hidden flex-col gap-1.5 rounded-2xl border border-slate-200 bg-white/90 p-3 shadow-sm backdrop-blur sm:flex">
             {Object.entries(TIER_META).map(([tier, meta]) => (
               <div key={tier} className="flex items-center gap-2">
-                <span className="h-3 w-3 shrink-0 border-2 border-ink" style={{ background: meta.color }} />
-                <span className="text-[11px] font-bold uppercase tracking-wide text-ink">
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: meta.color }} />
+                <span className="text-[11px] font-semibold text-slate-600">
                   {tier} · {meta.text}
                 </span>
               </div>
@@ -429,9 +435,9 @@ export default function MapView({ societies, onBoundsChange, selectedSlug, onSel
           <button
             aria-label="Recenter on Gurgaon"
             onClick={recenter}
-            className="absolute bottom-6 right-4 z-10 flex h-11 w-11 items-center justify-center border-3 border-ink bg-tierS shadow-brutal-sm transition-all hover:shadow-brutal active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+            className="absolute bottom-6 right-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-ink shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" strokeWidth="2.5" strokeLinecap="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="12" cy="12" r="6" />
               <line x1="12" y1="1.5" x2="12" y2="5" />
               <line x1="12" y1="19" x2="12" y2="22.5" />

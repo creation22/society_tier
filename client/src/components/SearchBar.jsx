@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MagnifyingGlass, MapPin } from '@phosphor-icons/react';
 import { useDebounce } from '../hooks/useDebounce.js';
 import api from '../utils/api.js';
-import { tierColor } from '../utils/tier.js';
+import { cn } from '../utils/cn.js';
+import TierBadge from './ui/TierBadge.jsx';
 
 /**
  * Global search with autocomplete (societies + sector/area groups).
@@ -50,9 +52,9 @@ export default function SearchBar({ compact = false, autoFocus = false }) {
     results && (results.societies.length > 0 || results.groups.length > 0);
 
   return (
-    <div ref={boxRef} className={`relative ${compact ? 'w-full max-w-[288px]' : 'w-full'}`}>
-      <div className="flex items-center border-3 border-ink bg-white shadow-brutal-sm transition focus-within:shadow-brutal">
-        <span className="pl-3 text-lg">🔍</span>
+    <div ref={boxRef} className={cn('relative', compact ? 'w-full max-w-[288px]' : 'w-full')}>
+      <div className="flex items-center rounded-full border border-slate-200 bg-white py-1 shadow-sm transition focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-ink/10">
+        <MagnifyingGlass weight="duotone" className="ml-3 h-5 w-5 shrink-0 text-slate-400" />
         <input
           autoFocus={autoFocus}
           value={q}
@@ -63,39 +65,37 @@ export default function SearchBar({ compact = false, autoFocus = false }) {
           onFocus={() => setOpen(true)}
           onKeyDown={(e) => e.key === 'Enter' && q.trim() && go(`/societies?q=${encodeURIComponent(q.trim())}`)}
           placeholder="Search a society, sector or area..."
-          className={`w-full bg-transparent px-3 font-semibold outline-none ${compact ? 'py-2 text-sm' : 'py-3.5'}`}
+          className={cn(
+            'w-full bg-transparent px-3 font-body outline-none',
+            compact ? 'py-1.5 text-sm' : 'py-2.5'
+          )}
         />
       </div>
 
       {open && hasResults && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-2 animate-pop-in border-3 border-ink bg-paper shadow-brutal">
+        <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg animate-pop-in">
           {results.groups.map((g) => (
             <button
               key={`${g.type}-${g.value}`}
               onClick={() => go(g.type === 'area' ? `/area/${encodeURIComponent(g.value)}` : `/societies?sector=${encodeURIComponent(g.value)}`)}
-              className="flex w-full items-center gap-2 border-b-3 border-ink/10 px-4 py-2.5 text-left text-sm font-bold uppercase transition-colors hover:bg-tierS"
+              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
             >
-              <span>📍</span> {g.label}
+              <MapPin weight="duotone" className="h-4 w-4 text-slate-400" /> {g.label}
             </button>
           ))}
           {results.societies.map((s) => (
             <button
               key={s.slug}
               onClick={() => go(`/society/${s.slug}`)}
-              className="flex w-full items-center justify-between gap-3 border-b-3 border-ink/10 px-4 py-2.5 text-left last:border-b-0 transition-colors hover:bg-tierS"
+              className="flex w-full items-center justify-between gap-3 border-t border-slate-100 px-4 py-2.5 text-left transition-colors first:border-t-0 hover:bg-slate-50"
             >
               <span>
-                <span className="block font-bold">{s.name}</span>
-                <span className="text-xs text-gray-600">{s.sector} · {s.area}</span>
+                <span className="block font-display font-semibold text-ink">{s.name}</span>
+                <span className="text-xs text-slate-500">{s.sector} · {s.area}</span>
               </span>
-              <span className="flex shrink-0 items-center gap-2 text-sm font-bold">
-                {Number(s.overallRating).toFixed(1)} ★
-                <span
-                  className="inline-flex h-6 w-6 items-center justify-center border-3 border-ink font-display text-xs"
-                  style={{ background: tierColor(s.tier) }}
-                >
-                  {s.tier}
-                </span>
+              <span className="flex shrink-0 items-center gap-2 text-sm font-semibold text-slate-700">
+                {Number(s.overallRating).toFixed(1)}
+                <TierBadge tier={s.tier} size="sm" />
               </span>
             </button>
           ))}

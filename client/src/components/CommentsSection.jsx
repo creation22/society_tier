@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { ChatCircle, PaperPlaneTilt } from '@phosphor-icons/react';
 import CommentItem from './CommentItem.jsx';
+import EmptyState from './ui/EmptyState.jsx';
 import api from '../utils/api.js';
+import { cn } from '../utils/cn.js';
 import { COMMENT_TAGS } from '../utils/tier.js';
 
 const SORTS = ['top', 'new', 'controversial'];
@@ -54,15 +57,20 @@ export default function CommentsSection({ societySlug, user }) {
   return (
     <section>
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <h2 className="font-display text-xl uppercase sm:text-2xl">What are residents saying?</h2>
+        <h2 className="font-display text-xl font-bold tracking-tight text-ink sm:text-2xl">
+          What are residents saying?
+        </h2>
         <div className="ml-auto flex gap-1">
           {SORTS.map((s) => (
             <button
               key={s}
               onClick={() => setSort(s)}
-              className={`border-3 border-ink px-2.5 py-1 text-xs font-bold uppercase shadow-brutal-sm ${
-                sort === s ? 'bg-ink text-cream' : 'bg-white hover:bg-tierS'
-              }`}
+              className={cn(
+                'rounded-full px-3 py-1 text-xs font-semibold capitalize transition-colors',
+                sort === s
+                  ? 'bg-slate-900 text-white'
+                  : 'text-slate-500 hover:bg-slate-100'
+              )}
             >
               {s}
             </button>
@@ -71,24 +79,27 @@ export default function CommentsSection({ societySlug, user }) {
       </div>
 
       {/* Compose */}
-      <div className="mb-6 border-3 border-ink bg-paper p-3 shadow-brutal">
+      <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
           rows={3}
           maxLength={5000}
           placeholder="Share your experience with this society."
-          className="w-full resize-y border-3 border-ink bg-white p-2 outline-none focus:shadow-brutal-sm"
+          className="w-full resize-y rounded-lg border border-slate-200 bg-white p-2 font-body text-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-ink/10"
         />
-        <div className="mt-2 flex flex-wrap items-center gap-1">
-          <span className="text-xs font-bold uppercase text-gray-600">Tags:</span>
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Tags:</span>
           {COMMENT_TAGS.map((t) => (
             <button
               key={t}
               onClick={() => toggleTag(t)}
-              className={`border-2 border-ink px-1.5 py-0.5 text-[10px] font-bold transition-colors ${
-                tags.includes(t) ? 'bg-tierS' : 'bg-white hover:bg-tierS/50'
-              }`}
+              className={cn(
+                'rounded-full border border-slate-200 px-2 py-0.5 text-xs font-medium transition-colors',
+                tags.includes(t)
+                  ? 'bg-ink text-white border-ink'
+                  : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+              )}
             >
               #{t}
             </button>
@@ -96,15 +107,16 @@ export default function CommentsSection({ societySlug, user }) {
           <button
             onClick={post}
             disabled={posting || !body.trim()}
-            className="brutal-btn ml-auto bg-tierS !py-1 !text-xs disabled:opacity-50"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-1.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-md disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none"
           >
+            <PaperPlaneTilt weight="fill" className="h-3.5 w-3.5" />
             {posting ? 'Posting…' : 'Comment'}
           </button>
         </div>
       </div>
 
       {error && (
-        <p className="mb-4 border-3 border-ink bg-tierD px-3 py-2 text-sm font-bold uppercase text-white shadow-brutal-sm">
+        <p className="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-medium text-rose-700">
           {error}
         </p>
       )}
@@ -113,15 +125,17 @@ export default function CommentsSection({ societySlug, user }) {
       {!comments ? (
         <div className="space-y-4">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-24 animate-pulse border-3 border-ink bg-ink/10" />
+            <div key={i} className="h-24 rounded-2xl border border-slate-200 bg-slate-100/70 animate-pulse" />
           ))}
         </div>
       ) : comments.length === 0 ? (
-        <div className="border-3 border-dashed border-ink p-8 text-center font-bold uppercase text-gray-600">
-          No comments yet. Be the first voice.
-        </div>
+        <EmptyState
+          icon={ChatCircle}
+          title="No comments yet"
+          description="Be the first voice — share what it's really like living here."
+        />
       ) : (
-        <div>
+        <div className="space-y-4">
           {comments.map((c) => (
             <CommentItem key={c._id} comment={c} societySlug={societySlug} onVoted={applyVote} />
           ))}

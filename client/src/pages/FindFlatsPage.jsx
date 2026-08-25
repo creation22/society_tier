@@ -1,20 +1,46 @@
+import { RocketLaunch, EnvelopeSimple } from '@phosphor-icons/react';
+import PageHeader from '../components/ui/PageHeader.jsx';
+import Reveal from '../components/ui/Reveal.jsx';
+import SectionDivider from '../components/ui/SectionDivider.jsx';
 import { useSEO } from '../utils/seo.js';
 
 export default function FindFlatsPage() {
   useSEO({ title: 'Find Flats — Coming Soon | GurgaonFlat', path: '/find-flats' });
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center bg-dotgrid px-4 text-center">
-      <div className="border-3 border-ink bg-tierS px-4 py-1.5 font-display text-sm uppercase shadow-brutal-sm">
-        Coming Soon
-      </div>
-      <h1 className="mt-6 font-display text-5xl uppercase leading-none sm:text-7xl">Find Flats</h1>
-      <p className="mt-4 max-w-md font-bold uppercase text-gray-600">
-        Verified rentals & resale listings inside rated societies. Launching next.
-      </p>
-      <p className="mt-2 text-sm text-gray-500">
-        Want early access? <a href="mailto:creation2224@gmail.com" className="font-bold underline">Tell us</a>.
-      </p>
-    </div>
+    <>
+      <PageHeader
+        crumbs={[{ label: 'Home', to: '/' }, { label: 'Find Flats' }]}
+        eyebrow="Coming soon"
+        title="Find"
+        accent="flats"
+        intro="Verified rentals & resale listings inside rated societies. Launching next."
+      >
+        <a
+          href="mailto:creation2224@gmail.com"
+          className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+        >
+          <EnvelopeSimple weight="duotone" className="h-4 w-4" />
+          Request early access
+        </a>
+      </PageHeader>
+
+      <section className="mx-auto max-w-3xl px-4 pb-24">
+        <SectionDivider />
+        <Reveal>
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg">
+              <RocketLaunch weight="duotone" className="h-8 w-8" />
+            </div>
+            <h2 className="mt-6 font-display text-2xl font-bold tracking-tight text-ink">
+              Built for the next move.
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-500">
+              We are hand-curating every listing so you only see homes inside societies you can actually trust. Drop your email and we will let you in before the doors open.
+            </p>
+          </div>
+        </Reveal>
+      </section>
+    </>
   );
 }
