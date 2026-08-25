@@ -63,7 +63,7 @@ export default function LandingPage() {
     <div className="overflow-hidden">
       {/* ───────── Hero ───────── */}
       <section className="relative isolate flex min-h-[88vh] flex-col justify-center overflow-hidden bg-ink py-32 sm:py-44">
-        <CityVideoBackdrop fadeTo="#fafaf9" />
+        <CityVideoBackdrop fadeTo="#DDEEF0" />
         {/* Soft radial scrim behind the hero copy so small text stays legible
             over bright sky portions of the video. */}
         <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[40rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(0_0_0/0.38),transparent_70%)]" />
@@ -158,7 +158,7 @@ export default function LandingPage() {
       </section>
 
       {/* ───────── Marquee strip ───────── */}
-      <div className="border-y border-slate-200 bg-white py-4">
+      <div className="border-y border-white/40 bg-white/30 py-4 backdrop-blur-sm">
         <Marquee speed={32}>
           {AREAS.map((a) => (
             <span key={a} className="flex items-center gap-8 font-display text-sm font-semibold uppercase tracking-wide text-slate-400">
@@ -186,7 +186,7 @@ export default function LandingPage() {
         <div className="grid gap-6 md:grid-cols-3">
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.08}>
-              <div className="relative h-full rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+              <div className="relative h-full rounded-3xl border border-white/70 bg-white/80 p-8 shadow-sm backdrop-blur-md">
                 <span className="font-display text-4xl font-bold text-slate-200">{s.n}</span>
                 <h3 className="mt-3 font-display text-lg font-bold text-ink">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-500">{s.body}</p>
@@ -220,11 +220,11 @@ export default function LandingPage() {
 
           {/* Tier ladder — editorial, monochrome. Tier colour is a single hairline dot. */}
           <Reveal delay={0.16}>
-            <div className="mt-14 divide-y divide-slate-200 border-y border-slate-200">
+            <div className="mt-14 overflow-hidden rounded-2xl border border-white/60 bg-white/40 divide-y divide-white/60 backdrop-blur-md">
               {TIER_ROWS.map((t) => (
                 <div
                   key={t.tier}
-                  className="group grid grid-cols-[auto_1fr_auto] items-center gap-6 py-6 transition-colors hover:bg-slate-50/60 sm:grid-cols-[3.5rem_1fr_auto] sm:gap-10"
+                  className="group grid grid-cols-[auto_1fr_auto] items-center gap-6 px-5 py-6 transition-colors hover:bg-white/70 sm:grid-cols-[3.5rem_1fr_auto] sm:gap-10 sm:px-8"
                 >
                   <span className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
                     {t.tier}
@@ -249,8 +249,8 @@ export default function LandingPage() {
 
           {/* Bayesian proof — quiet two-column comparison, no coloured bars, no emoji. */}
           <Reveal delay={0.1}>
-            <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 md:grid-cols-2">
-              <div className="bg-white p-8">
+            <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-white/70 bg-slate-200/60 backdrop-blur-md md:grid-cols-2">
+              <div className="bg-white/85 p-8 backdrop-blur-md">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">The trap</p>
                 <div className="mt-5 flex items-baseline gap-3">
                   <span className="font-display text-5xl font-bold tracking-tight text-ink">9.8</span>
@@ -264,7 +264,7 @@ export default function LandingPage() {
                   swings it by half a point.
                 </p>
               </div>
-              <div className="bg-ink p-8 text-white">
+              <div className="bg-ink/95 p-8 text-white backdrop-blur-md">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">The verdict</p>
                 <div className="mt-5 flex items-baseline gap-3">
                   <span className="font-display text-5xl font-bold tracking-tight">9.3</span>
