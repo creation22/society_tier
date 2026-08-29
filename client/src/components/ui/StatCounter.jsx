@@ -11,11 +11,11 @@ export default function StatCounter({ to, label, prefix = '', suffix = '', decim
   return (
     <div ref={ref}>
       <div className="font-display text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-        <span className="text-slate-400">{prefix}</span>
+        <span className="text-slate-300">{prefix}</span>
         {display}
         {suffix}
       </div>
-      <p className="mt-2 text-sm font-medium text-slate-500">{label}</p>
+      <p className="mt-2 text-sm font-medium tracking-wide text-slate-500">{label}</p>
     </div>
   );
 }

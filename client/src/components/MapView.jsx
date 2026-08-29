@@ -42,13 +42,13 @@ function textWidth(text) {
 }
 
 const INK = '#0A0A0A';
-const CREAM = '#F5F1E8';
+const CREAM = '#FAFAF9';
 
 /**
- * Brutalist map pin. Flat tier-colored teardrop with a thick black outline
- * and a hard offset shadow. Full mode stacks a cream name pill (black border,
- * tier dot, black text) above the pin. Compact mode (zoomed out) drops the
- * pill so labels never collide.
+ * Polished map pin. Soft-shadowed tier-colored teardrop with a crisp white
+ * core showing the rating. Full mode stacks a cream name pill (tier dot +
+ * ink text) above the pin. Compact mode (zoomed out) drops the pill so
+ * labels never collide. Selected pins get a soft halo ring.
  */
 const iconCache = new Map();
 function pinIcon(maps, s, { selected = false, compact = false } = {}) {
@@ -56,82 +56,94 @@ function pinIcon(maps, s, { selected = false, compact = false } = {}) {
   if (iconCache.has(key)) return iconCache.get(key);
 
   const color = tierColor(s.tier);
-  const R = compact ? 10 : 12;
-  const TAIL = 9;
-  const SH = 3; // hard shadow offset
+  const R = compact ? 11 : 13;
+  const TAIL = 10;
 
   function teardrop(cx, cy, tipY, fill, stroke, sw) {
     return (
       `<path d="M ${cx} ${tipY}` +
-      ` C ${cx - R * 0.3} ${tipY - R * 0.55}, ${cx - R} ${cy + R * 0.45}, ${cx - R} ${cy}` +
+      ` C ${cx - R * 0.32} ${tipY - R * 0.55}, ${cx - R} ${cy + R * 0.45}, ${cx - R} ${cy}` +
       ` A ${R} ${R} 0 1 1 ${cx + R} ${cy}` +
-      ` C ${cx + R} ${cy + R * 0.45}, ${cx + R * 0.3} ${tipY - R * 0.55}, ${cx} ${tipY} Z"` +
+      ` C ${cx + R} ${cy + R * 0.45}, ${cx + R * 0.32} ${tipY - R * 0.55}, ${cx} ${tipY} Z"` +
       ` fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`
     );
   }
 
+  // Soft layered drop shadow filter id (unique per size to avoid clashes).
+  const shadowId = `ps-${compact ? 'c' : 'f'}-${selected ? 's' : 'n'}`;
+
   let pw, svgW, svgH, cx, cy, tipY, svg;
 
   if (compact) {
-    pw = R * 2 + 6;
-    svgW = pw + SH;
+    pw = R * 2 + 8;
+    svgW = pw + 6;
     cx = pw / 2;
-    cy = R + 3;
+    cy = R + 4;
     tipY = cy + R + TAIL;
-    svgH = tipY + SH + 2;
+    svgH = tipY + 6;
     svg =
       `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">` +
-      `<g transform="translate(${SH},${SH})">` +
-      teardrop(cx, cy, tipY, INK, 'none', 0) +
-      `<circle cx="${cx}" cy="${cy}" r="7" fill="${INK}"/>` +
+      `<defs><filter id="${shadowId}" x="-50%" y="-50%" width="200%" height="200%">` +
+      `<feDropShadow dx="0" dy="2.5" stdDeviation="2.5" flood-color="#0A0A0A" flood-opacity="0.35"/>` +
+      `</filter></defs>` +
+      (selected ? `<circle cx="${cx}" cy="${cy}" r="${R + 5}" fill="none" stroke="${color}" stroke-width="2" opacity="0.45"/>` : '') +
+      `<g filter="url(#${shadowId})">` +
+      teardrop(cx, cy, tipY, color, INK, 2) +
+      `<circle cx="${cx}" cy="${cy}" r="7" fill="#FFFFFF"/>` +
       `</g>` +
-      teardrop(cx, cy, tipY, color, INK, 2.5) +
-      `<circle cx="${cx}" cy="${cy}" r="7" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>` +
       `<text x="${cx}" y="${cy + 3}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="9" fill="${INK}">${formatRating(s.overallRating)}</text>` +
       `</svg>`;
   } else {
     const name = s.name.length > 26 ? `${s.name.slice(0, 25)}…` : s.name;
     const tw = textWidth(name);
-    const DOT_R = 3;
-    const DOT_GAP = 5;
-    const PAD_X = 11;
+    const DOT_R = 3.5;
+    const DOT_GAP = 6;
+    const PAD_X = 12;
     const innerW = DOT_R * 2 + DOT_GAP + tw;
-    pw = Math.max(innerW + PAD_X * 2, 52);
-    svgW = pw + SH;
+    pw = Math.max(innerW + PAD_X * 2, 56);
+    svgW = pw + 6;
 
-    const PILL_H = 22;
-    const GAP = 2;
+    const PILL_H = 24;
+    const GAP = 3;
     cx = pw / 2;
     cy = PILL_H + GAP + R;
     tipY = cy + R + TAIL;
-    svgH = tipY + SH + 2;
+    svgH = tipY + 6;
 
     const pillW = innerW + PAD_X * 2;
     const pillX = (pw - pillW) / 2;
     const dotCx = pillX + PAD_X + DOT_R;
     const textCx = dotCx + DOT_R + DOT_GAP + tw / 2;
     const stemX = cx - 1.5;
-    const stemH = cy - R - PILL_H + 4;
+    const stemH = cy - R - PILL_H + 5;
+    const pillShadowId = `${shadowId}-pill`;
 
     svg =
       `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">` +
-      `<g transform="translate(${SH},${SH})">` +
-      `<rect x="${pillX}" y="0" width="${pillW}" height="${PILL_H}" rx="4" fill="${INK}"/>` +
-      `<rect x="${stemX}" y="${PILL_H - 2}" width="3" height="${stemH}" fill="${INK}"/>` +
-      teardrop(cx, cy, tipY, INK, 'none', 0) +
-      `<circle cx="${cx}" cy="${cy}" r="7.5" fill="${INK}"/>` +
+      `<defs>` +
+      `<filter id="${shadowId}" x="-50%" y="-50%" width="200%" height="200%">` +
+      `<feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0A0A0A" flood-opacity="0.32"/>` +
+      `</filter>` +
+      `<filter id="${pillShadowId}" x="-20%" y="-50%" width="140%" height="200%">` +
+      `<feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#0A0A0A" flood-opacity="0.18"/>` +
+      `</filter>` +
+      `</defs>` +
+      (selected ? `<circle cx="${cx}" cy="${cy}" r="${R + 6}" fill="none" stroke="${color}" stroke-width="2.5" opacity="0.5"/>` : '') +
+      `<g filter="url(#${pillShadowId})">` +
+      `<rect x="${pillX}" y="0" width="${pillW}" height="${PILL_H}" rx="6" fill="${CREAM}" stroke="${INK}" stroke-width="2"/>` +
+      `<rect x="${stemX}" y="${PILL_H - 3}" width="3" height="${stemH}" fill="${INK}"/>` +
       `</g>` +
-      `<rect x="${stemX}" y="${PILL_H - 2}" width="3" height="${stemH}" fill="${INK}"/>` +
-      teardrop(cx, cy, tipY, color, INK, 2.5) +
-      `<circle cx="${cx}" cy="${cy}" r="7.5" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>` +
+      `<circle cx="${dotCx}" cy="${PILL_H / 2}" r="${DOT_R}" fill="${color}" stroke="${INK}" stroke-width="1.2"/>` +
+      `<text x="${textCx}" y="16.2" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="11" fill="${INK}">${escXml(name)}</text>` +
+      `<g filter="url(#${shadowId})">` +
+      teardrop(cx, cy, tipY, color, INK, 2) +
+      `<circle cx="${cx}" cy="${cy}" r="7.5" fill="#FFFFFF"/>` +
+      `</g>` +
       `<text x="${cx}" y="${cy + 3.2}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="9.5" fill="${INK}">${formatRating(s.overallRating)}</text>` +
-      `<rect x="${pillX}" y="0" width="${pillW}" height="${PILL_H}" rx="4" fill="${CREAM}" stroke="${INK}" stroke-width="2.5"/>` +
-      `<circle cx="${dotCx}" cy="${PILL_H / 2}" r="${DOT_R}" fill="${color}" stroke="${INK}" stroke-width="1.5"/>` +
-      `<text x="${textCx}" y="15.2" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="11" fill="${INK}">${escXml(name)}</text>` +
       `</svg>`;
   }
 
-  const scale = selected ? 1.18 : 1;
+  const scale = selected ? 1.16 : 1;
   const icon = {
     url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
     scaledSize: new maps.Size(svgW * scale, svgH * scale),
@@ -152,7 +164,7 @@ function injectInfoWindowCss() {
     .gm-style .gm-style-iw-t::after{display:none!important}
     .gm-style .gm-style-iw-d{overflow:hidden!important}
     .gm-style .gm-ui-hover-effect{top:8px!important;right:8px!important;width:26px!important;height:26px!important;border:1px solid #e2e8f0!important;background:#fff!important;border-radius:9999px!important;box-shadow:0 1px 3px rgba(10,10,10,.12)!important;z-index:2}
-    .st-iw{min-width:240px;max-width:268px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 12px 32px -8px rgba(10,10,10,.22),0 2px 6px -2px rgba(10,10,10,.08);font-family:'DM Sans',system-ui,sans-serif;overflow:hidden}
+    .st-iw{min-width:240px;max-width:268px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 12px 32px -8px rgba(10,10,10,.22),0 2px 6px -2px rgba(10,10,10,.08);font-family:'Inter',system-ui,sans-serif;overflow:hidden}
     .st-iw-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid #f1f5f9}
     .st-iw-name{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;font-size:14px;line-height:1.2;color:#0A0A0A}
     .st-iw-chip{flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.02em;padding:3px 8px;border-radius:8px;color:#fff}

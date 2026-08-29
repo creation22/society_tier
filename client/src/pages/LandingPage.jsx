@@ -73,13 +73,13 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-md [text-shadow:0_1px_6px_rgb(0_0_0/0.45)]"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-white shadow-[0_1px_0_0_rgba(255,255,255,0.15)_inset,0_8px_24px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl [text-shadow:0_1px_6px_rgb(0_0_0/0.45)]"
             >
               <Sparkle weight="duotone" className="h-3.5 w-3.5" />
               Community-powered · No broker BS
             </motion.span>
 
-            <h1 className="mt-6 font-display text-4xl font-bold leading-[1.04] tracking-tight text-white [text-shadow:0_2px_12px_rgb(0_0_0/0.45)] sm:text-6xl sm:leading-[1.02]">
+            <h1 className="mt-7 font-display text-[2.6rem] font-bold leading-[1.04] tracking-tight text-white [text-shadow:0_2px_16px_rgb(0_0_0/0.5)] sm:text-6xl sm:leading-[1.02]">
               <TextReveal as="span" text="Rate your society." delay={0.05} />
               <br />
               <span className="inline-flex flex-wrap items-baseline justify-center gap-x-3">
@@ -103,7 +103,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-8 max-w-xl text-lg leading-relaxed text-white [text-shadow:0_1px_12px_rgb(0_0_0/0.55),0_0_24px_rgb(0_0_0/0.35)]"
+              className="mt-7 max-w-xl text-lg leading-relaxed text-white/90 [text-shadow:0_1px_12px_rgb(0_0_0/0.55),0_0_24px_rgb(0_0_0/0.35)]"
             >
               A tier list for Gurgaon’s residential societies — built on real resident ratings, threaded
               discussions and a confidence-adjusted ranking algorithm. Find the best, avoid the rest.
@@ -113,16 +113,16 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-9 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+              className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
             >
               <Magnetic>
-                <PressButton to="/map" variant="secondary" size="lg">
+                <PressButton to="/map" variant="secondary" size="lg" className="!px-8">
                   <MapTrifold weight="duotone" className="h-5 w-5" />
                   Explore the map
                 </PressButton>
               </Magnetic>
               <Magnetic>
-                <PressButton to="/societies?openRate=1" variant="glass" size="lg">
+                <PressButton to="/societies?openRate=1" variant="glass" size="lg" className="!px-8">
                   <Star weight="duotone" className="h-5 w-5" />
                   Rate your society
                 </PressButton>
@@ -158,10 +158,10 @@ export default function LandingPage() {
       </section>
 
       {/* ───────── Marquee strip ───────── */}
-      <div className="border-y border-white/40 bg-white/30 py-4 backdrop-blur-sm">
+      <div className="border-y border-white/50 bg-white/40 py-4 backdrop-blur-md">
         <Marquee speed={32}>
           {AREAS.map((a) => (
-            <span key={a} className="flex items-center gap-8 font-display text-sm font-semibold uppercase tracking-wide text-slate-400">
+            <span key={a} className="flex items-center gap-8 font-display text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
               {a} <span className="text-slate-300">/</span>
             </span>
           ))}

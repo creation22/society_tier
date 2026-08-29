@@ -20,9 +20,12 @@ module.exports = {
       },
       fontFamily: {
         display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
-        body: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        body: ['"Inter"', 'system-ui', 'sans-serif'],
         serif: ['"Instrument Serif"', 'Fraunces', 'Georgia', 'serif'],
         mono: ['"Space Grotesk"', 'ui-monospace', 'monospace']
+      },
+      letterSpacing: {
+        tightest: '-0.04em'
       },
       borderRadius: {
         sm: '6px',
