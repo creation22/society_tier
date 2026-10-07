@@ -43,10 +43,10 @@ export default function Footer() {
               One rating per account per society.
             </p>
             <a
-              href="mailto:creation2224@gmail.com?subject=GurgaonFlat%20—%20Developer%20Contact"
+              href="mailto:connect@gurgaonflat.online?subject=GurgaonFlat%20—%20Contact"
               className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-sm font-semibold text-ink shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
             >
-              Contact the developer
+              connect@gurgaonflat.online
               <span aria-hidden="true">→</span>
             </a>
           </div>

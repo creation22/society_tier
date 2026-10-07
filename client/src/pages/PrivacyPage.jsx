@@ -75,7 +75,7 @@ const SECTIONS = [
     body: (
       <p>
         This project is maintained by an independent developer. Reach out at{' '}
-        <a href="mailto:creation2224@gmail.com" className="font-semibold text-ink underline decoration-slate-300 underline-offset-4 transition-colors hover:decoration-ink">creation2224@gmail.com</a>.
+        <a href="mailto:connect@gurgaonflat.online" className="font-semibold text-ink underline decoration-slate-300 underline-offset-4 transition-colors hover:decoration-ink">connect@gurgaonflat.online</a>.
       </p>
     )
   }

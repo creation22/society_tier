@@ -17,7 +17,7 @@ export default function FindFlatsPage() {
         intro="Verified rentals & resale listings inside rated societies. Launching next."
       >
         <a
-          href="mailto:creation2224@gmail.com"
+          href="mailto:connect@gurgaonflat.online"
           className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
         >
           <EnvelopeSimple weight="duotone" className="h-4 w-4" />
