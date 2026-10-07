@@ -25,9 +25,9 @@ import { useSEO } from '../utils/seo.js';
 import api from '../utils/api.js';
 
 const STEPS = [
-  { n: '01', title: 'Search your society', body: 'Look up any society across Gurgaon by name, sector or area.' },
-  { n: '02', title: 'Rate 10 parameters', body: 'Score location, safety, maintenance, amenities and more in under a minute.' },
-  { n: '03', title: 'See where it ranks', body: 'Your score feeds a confidence-adjusted tier list updated in real time.' }
+  { n: '01', title: 'It learns how you live', body: 'Workplace, budget, commute, lifestyle, and preferences — a persistent picture of what actually matters to you.' },
+  { n: '02', title: 'It researches the city', body: 'Fragmented local information, pulled together so you don’t have to hunt across brokers, forums, and maps.' },
+  { n: '03', title: 'It helps you decide', body: 'Where to rent, which society fits, and how to navigate Gurgaon — before you make the move.' }
 ];
 
 const AREAS = ['Golf Course Rd', 'Golf Course Ext', 'Dwarka Expressway', 'New Gurgaon', 'Sohna Road', 'MG Road', 'Cyber City'];
@@ -43,9 +43,9 @@ const TIER_ROWS = [
 
 export default function LandingPage() {
   useSEO({
-    title: 'GurgaonFlat — Rate Your Society. See Where It Ranks in Gurgaon.',
+    title: 'GurgaonFlat — A personal AI agent for people moving to Gurgaon.',
     description:
-      'Gurgaon community-powered society tier list. Rate your society, read real resident opinions and see who makes S Tier.',
+      'A personal AI agent for commuters, starting with people moving to cities like Gurgaon. It learns your workplace, budget, commute, and lifestyle, then helps you decide where to rent and which society fits.',
     path: '/'
   });
 
@@ -76,16 +76,16 @@ export default function LandingPage() {
               className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-white shadow-[0_1px_0_0_rgba(255,255,255,0.15)_inset,0_8px_24px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl [text-shadow:0_1px_6px_rgb(0_0_0/0.45)]"
             >
               <Sparkle weight="duotone" className="h-3.5 w-3.5" />
-              Community-powered · No broker BS
+              Building AI-native
             </motion.span>
 
             <h1 className="mt-7 font-display text-[2.6rem] font-bold leading-[1.04] tracking-tight text-white [text-shadow:0_2px_16px_rgb(0_0_0/0.5)] sm:text-6xl sm:leading-[1.02]">
-              <TextReveal as="span" text="Rate your society." delay={0.05} />
+              <TextReveal as="span" text="A personal AI agent" delay={0.05} />
               <br />
               <span className="inline-flex flex-wrap items-baseline justify-center gap-x-3">
-                <TextReveal as="span" text="See where it" delay={0.25} />
+                <TextReveal as="span" text="for the" delay={0.25} />
                 <span className="relative inline-block">
-                  <em className="font-serif font-normal italic text-white">ranks</em>
+                  <em className="font-serif font-normal italic text-white">city</em>
                   <DrawLine
                     className="absolute -bottom-2 left-0 w-full text-white/70"
                     d="M2 8 Q 50 2 100 7 T 198 6"
@@ -103,10 +103,12 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-7 max-w-xl text-lg leading-relaxed text-white/90 [text-shadow:0_1px_12px_rgb(0_0_0/0.55),0_0_24px_rgb(0_0_0/0.35)]"
+              className="mt-7 max-w-2xl text-lg leading-relaxed text-white/90 [text-shadow:0_1px_12px_rgb(0_0_0/0.55),0_0_24px_rgb(0_0_0/0.35)]"
             >
-              A tier list for Gurgaon’s residential societies — built on real resident ratings, threaded
-              discussions and a confidence-adjusted ranking algorithm. Find the best, avoid the rest.
+              We’re building a personal AI agent for commuters, starting with people moving to cities like
+              Gurgaon. On Claude, it builds a persistent understanding of your workplace, budget, commute,
+              lifestyle, and preferences — then researches fragmented local information to help you decide
+              where to rent, which society fits best, and how to navigate the city.
             </motion.p>
 
             <motion.div
@@ -150,7 +152,7 @@ export default function LandingPage() {
                 </span>
               </div>
               <span className="text-center sm:text-left">
-                Join <span className="font-semibold text-white">thousands</span> of residents rating Gurgaon
+                An agent that understands <span className="font-semibold text-white">your city</span> — and how you want to live in it
               </span>
             </motion.div>
           </div>
@@ -182,7 +184,7 @@ export default function LandingPage() {
       <FeaturesShowcase />
 
       {/* ───────── How it works ───────── */}
-      <Section eyebrow="How it works" title="From search to verdict in three steps">
+      <Section eyebrow="How it works" title="From your life to a decision about the city">
         <div className="grid gap-6 md:grid-cols-3">
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.08}>
@@ -213,8 +215,8 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={0.12}>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600">
-              Raw averages lie. Each society’s score uses a Bayesian prior so a 9.8 from 5 ratings
-              doesn’t beat a 9.3 from 1,500.
+              The agent doesn’t stop at a listing. Rankings stay confidence-adjusted, so a 9.8 from 5
+              ratings doesn’t beat a 9.3 from 1,500 — the local signal it uses to recommend a society.
             </p>
           </Reveal>
 
@@ -291,7 +293,7 @@ export default function LandingPage() {
         <Section
           eyebrow="Top rated"
           title="What residents love right now"
-          intro="Pulled live from the ranking engine — confidence-adjusted, not raw averages."
+          intro="Live local signal the agent can use — confidence-adjusted rankings, not raw averages."
         >
           <div className="grid gap-5 sm:grid-cols-2">
             {top.map((s, i) => (
@@ -319,15 +321,15 @@ export default function LandingPage() {
           <div className="text-center md:text-left">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70 backdrop-blur">
               <Sparkle weight="duotone" className="h-3.5 w-3.5" />
-              One rating per account per society
+              AI-native local operating system
             </span>
             <h2 className="mt-6 font-display text-3xl font-bold leading-[1.08] tracking-tight text-white sm:text-[2.75rem]">
-              Your rating moves the{' '}
-              <span className="font-serif font-normal italic text-white">needle</span>.
+              An agent that knows your{' '}
+              <span className="font-serif font-normal italic text-white">city</span>.
             </h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-300 md:max-w-none">
-              The tier list reflects residents, not brokers. Add your voice in under a minute —
-              every score feeds a confidence-adjusted ranking that actually respects sample size.
+              We’re building toward a local operating system where every person has an agent that
+              understands their city and proactively helps them decide where and how they live.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row md:justify-start">
               <Magnetic>

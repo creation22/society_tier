@@ -40,18 +40,18 @@ export default function FeaturesShowcase() {
         <Reveal>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-white/70 px-3 py-1 text-xs font-semibold text-sky-800 shadow-sm backdrop-blur">
             <Sun weight="fill" className="h-3.5 w-3.5 text-amber-500" />
-            Everything you need
+            The local layer
           </span>
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            One platform for the <em className="font-serif font-normal italic">whole</em> society decision
+            The city knowledge your <em className="font-serif font-normal italic">agent</em> works from
           </h2>
         </Reveal>
         <Reveal delay={0.12}>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-700/90">
-            From discovery to due diligence — explore the map, read real discussions, compare side by side,
-            and trust a ranking that respects sample size.
+            Maps, rankings, resident discussions, and comparisons — the fragmented local information
+            an agent needs to help you choose where to rent and which society fits.
           </p>
         </Reveal>
 
