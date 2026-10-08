@@ -1,0 +1,14 @@
+{
+  "name": "GurgaonFlat Society Assistant",
+  "version": "1",
+  "url": "https://gurgaonflat.online/assistant",
+  "contact": "connect@gurgaonflat.online",
+  "howYoureBuilding": "We are building a personal AI agent for commuters, starting with people moving to cities like Gurgaon. Claude is the core intelligence layer. The agent builds a persistent understanding of each user's workplace, budget, commute, lifestyle, and preferences, then researches fragmented local information to help them decide where to rent, which society fits best, and how to navigate the city. We are building toward an AI-native local operating system where every person has an agent that understands their city and proactively helps them make better decisions about where and how they live. V1 on /assistant remembers that context in the browser and recommends societies from the live local index.",
+  "supportFromAnthropic": "We are looking for support in scaling Claude as the core intelligence layer of our product, especially around higher usage limits, model access, and agent architecture. We want to build an AI-native society assistant that deeply understands each place, continuously researches and updates local information, remembers context, and gives highly personalized recommendations to people deciding where to live in Gurgaon.",
+  "v1": {
+    "remembers": ["workplace", "budget", "commute", "lifestyle", "bhk"],
+    "storage": "browser localStorage on the visitor device",
+    "research": "GurgaonFlat society index at https://society-tier.onrender.com/api/societies",
+    "output": "Personalized society recommendations with reasons"
+  }
+}

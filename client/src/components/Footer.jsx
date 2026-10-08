@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 const NAV = {
   Explore: [
+    { href: '/assistant', label: 'Society assistant' },
     { to: '/map', label: 'Interactive Map' },
     { to: '/leaderboard', label: 'Tier Rankings' },
     { to: '/societies', label: 'All Societies' },
@@ -56,13 +57,19 @@ export default function Footer() {
               <h3 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">{heading}</h3>
               <ul className="mt-5 space-y-3 text-sm">
                 {links.map((l) => (
-                  <li key={l.to}>
-                    <Link
-                      to={l.to}
-                      className="text-slate-700 transition-colors hover:text-ink"
-                    >
-                      {l.label}
-                    </Link>
+                  <li key={l.href || l.to}>
+                    {l.href ? (
+                      <a href={l.href} className="text-slate-700 transition-colors hover:text-ink">
+                        {l.label}
+                      </a>
+                    ) : (
+                      <Link
+                        to={l.to}
+                        className="text-slate-700 transition-colors hover:text-ink"
+                      >
+                        {l.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

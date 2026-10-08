@@ -129,6 +129,12 @@ export default function LandingPage() {
                   Rate your society
                 </PressButton>
               </Magnetic>
+              <a
+                href="/assistant"
+                className="inline-flex items-center rounded-full border border-white/40 bg-white/15 px-6 py-3 text-sm font-semibold text-white shadow-sm backdrop-blur transition hover:bg-white/25"
+              >
+                Try the society assistant
+              </a>
             </motion.div>
 
             <motion.div

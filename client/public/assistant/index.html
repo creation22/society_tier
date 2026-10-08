@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Society Assistant — GurgaonFlat</title>
+    <meta
+      name="description"
+      content="V1 society assistant for people deciding where to live in Gurgaon. It remembers your workplace, budget, commute, and lifestyle, then recommends societies from live local rankings. Claude is the core intelligence layer we are scaling."
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://gurgaonflat.online/assistant" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <meta property="og:title" content="Society Assistant — GurgaonFlat" />
+    <meta
+      property="og:description"
+      content="An AI-native society assistant that remembers how you live and recommends where to rent in Gurgaon."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gurgaonflat.online/assistant" />
+    <meta property="og:site_name" content="GurgaonFlat" />
+    <link rel="alternate" type="application/json" href="https://gurgaonflat.online/assistant.json" title="Assistant facts for crawlers" />
+    <link rel="describedby" href="https://gurgaonflat.online/llms.txt" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "GurgaonFlat Society Assistant",
+        "url": "https://gurgaonflat.online/assistant",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "description": "V1 assistant that remembers workplace, budget, commute, lifestyle, and preferences, researches Gurgaon society rankings, and recommends where to live.",
+        "provider": {
+          "@type": "Organization",
+          "name": "GurgaonFlat",
+          "url": "https://gurgaonflat.online",
+          "email": "connect@gurgaonflat.online"
+        },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+      }
+    </script>
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, sans-serif;
+        color: #0f172a;
+        background: linear-gradient(180deg, #38bdf8 0%, #bae6fd 28%, #fde68a 100%);
+        min-height: 100vh;
+      }
+      a { color: inherit; }
+      header, main, footer { position: relative; }
+      .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 0;
+      }
+      .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: "Space Grotesk", sans-serif; font-weight: 700; }
+      .brand img { height: 36px; }
+      .brand em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; }
+      nav a { margin-left: 16px; font-size: 14px; text-decoration: none; color: #334155; }
+      h1, h2 { font-family: "Space Grotesk", sans-serif; letter-spacing: -0.03em; margin: 0; }
+      h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.05; }
+      h1 em, h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; }
+      .lede { max-width: 42rem; font-size: 1.05rem; line-height: 1.6; color: #1e293b; }
+      .grid { display: grid; gap: 16px; }
+      @media (min-width: 860px) { .split { grid-template-columns: 1fr 1fr; } }
+      article, form, .card {
+        background: rgba(255,255,255,0.78);
+        border: 1px solid rgba(255,255,255,0.8);
+        border-radius: 24px;
+        padding: 24px;
+        backdrop-filter: blur(10px);
+      }
+      .kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; }
+      label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; }
+      select, button {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid #cbd5e1;
+        background: white;
+        padding: 12px 14px;
+        font: inherit;
+      }
+      fieldset { border: 0; margin: 14px 0 0; padding: 0; }
+      fieldset label { font-weight: 500; display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+      button[type="submit"] {
+        margin-top: 18px;
+        background: #0f172a;
+        color: white;
+        font-weight: 650;
+        cursor: pointer;
+        border: 0;
+      }
+      .checks { display: grid; grid-template-columns: 1fr 1fr; }
+      .result { display: grid; gap: 8px; padding: 16px 0; border-top: 1px solid rgba(15,23,42,0.08); }
+      .result strong { font-family: "Space Grotesk", sans-serif; font-size: 1.15rem; }
+      .meta { color: #475569; font-size: 14px; }
+      .why { margin: 8px 0 0; padding-left: 18px; color: #334155; }
+      .note { font-size: 13px; color: #475569; }
+      footer { padding: 28px 0 48px; font-size: 14px; color: #334155; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="brand" href="/"><img src="/logo.png" alt="" /> Gurgaon<em>Flat</em></a>
+        <nav aria-label="Site">
+          <a href="/">Home</a>
+          <a href="/map">Map</a>
+          <a href="/societies">Societies</a>
+          <a href="mailto:connect@gurgaonflat.online">Contact</a>
+        </nav>
+      </header>
+
+      <main>
+        <p class="kicker">V1 · Society assistant</p>
+        <h1>An assistant that learns <em>how you live</em>.</h1>
+        <p class="lede">
+          GurgaonFlat is building a personal AI agent for commuters, starting with people moving to cities like Gurgaon.
+          On Claude, the agent builds a persistent understanding of each user’s workplace, budget, commute, lifestyle, and preferences,
+          then researches fragmented local information to help them decide where to rent, which society fits best, and how to navigate the city.
+          This page is the working v1: it saves that context on your device, reads the latest society index, and returns a short list fitted to you.
+        </p>
+
+        <div class="grid split" style="margin-top: 28px">
+          <article id="how-youre-building">
+            <p class="kicker">How you’re building</p>
+            <h2 style="margin-top: 8px">Claude is the core intelligence layer.</h2>
+            <p>
+              We are building toward an AI-native local operating system where every person has an agent that understands their city
+              and proactively helps them make better decisions about where and how they live.
+              The society assistant deeply understands each place, continuously researches and updates local information,
+              remembers context, and gives highly personalized recommendations to people deciding where to live in Gurgaon.
+            </p>
+            <p>
+              V1 already does the local half in the open: your profile is remembered in this browser, recommendations are recomputed
+              from the live GurgaonFlat society index (rankings, area, price, and BHK), and each result explains why it fits.
+              Claude is how that layer becomes an agent that keeps researching the city, not a one-off form.
+            </p>
+          </article>
+
+          <article id="anthropic-support">
+            <p class="kicker">Where we want support from Anthropic</p>
+            <h2 style="margin-top: 8px">Scale Claude inside the product.</h2>
+            <p>
+              We are looking for support in scaling Claude as the core intelligence layer of GurgaonFlat, especially around
+              higher usage limits, model access, and agent architecture.
+            </p>
+            <p>
+              That support is for an AI-native society assistant that deeply understands each place, continuously researches and updates
+              local information, remembers context, and gives highly personalized recommendations to people deciding where to live in Gurgaon.
+            </p>
+            <p>
+              Contact <a href="mailto:connect@gurgaonflat.online">connect@gurgaonflat.online</a>.
+              Machine-readable copy: <a href="/llms.txt">llms.txt</a> and <a href="/assistant.json">assistant.json</a>.
+            </p>
+          </article>
+        </div>
+
+        <section style="margin-top: 16px">
+          <form id="profile" class="card" aria-describedby="memory-note">
+            <p class="kicker">Your context</p>
+            <h2 style="margin-top: 8px">Tell it where you are going.</h2>
+            <p id="memory-note" class="note">Nothing is sent to an account. V1 stores this profile in your browser and reuses it next visit.</p>
+
+            <label for="workplace">Workplace</label>
+            <select id="workplace" name="workplace" required>
+              <option value="">Select</option>
+              <option>Cyber City</option>
+              <option>Udyog Vihar</option>
+              <option>Golf Course Road</option>
+              <option>Sohna Road</option>
+              <option>New Gurgaon</option>
+              <option>Dwarka Expressway</option>
+              <option>Flexible / remote</option>
+            </select>
+
+            <label for="budget">Monthly rent budget</label>
+            <select id="budget" name="budget" required>
+              <option value="">Select</option>
+              <option value="40000">Under ₹40,000</option>
+              <option value="70000">₹40,000 – ₹70,000</option>
+              <option value="120000">₹70,000 – ₹1,20,000</option>
+              <option value="200000">₹1,20,000 and above</option>
+            </select>
+
+            <label for="commute">Commute you will accept</label>
+            <select id="commute" name="commute" required>
+              <option value="">Select</option>
+              <option value="20">Up to 20 minutes</option>
+              <option value="35">Up to 35 minutes</option>
+              <option value="50">Up to 50 minutes</option>
+              <option value="70">Up to 70 minutes</option>
+            </select>
+
+            <label for="bhk">Home size</label>
+            <select id="bhk" name="bhk" required>
+              <option value="">Select</option>
+              <option value="2">2 BHK</option>
+              <option value="3">3 BHK</option>
+              <option value="4">4 BHK</option>
+            </select>
+
+            <fieldset>
+              <legend class="kicker">Lifestyle</legend>
+              <div class="checks">
+                <label><input type="checkbox" name="lifestyle" value="family" /> Family</label>
+                <label><input type="checkbox" name="lifestyle" value="quiet" /> Quiet</label>
+                <label><input type="checkbox" name="lifestyle" value="metro" /> Close to offices</label>
+                <label><input type="checkbox" name="lifestyle" value="social" /> Social</label>
+              </div>
+            </fieldset>
+
+            <button type="submit">Recommend societies</button>
+          </form>
+
+          <div id="results" class="card" style="margin-top: 16px" aria-live="polite">
+            <p class="kicker">Recommendations</p>
+            <h2 style="margin-top: 8px">Where you could live.</h2>
+            <p class="note" id="status">
+              A 3 BHK under ₹80,000 with a 35-minute commute to Cyber City is ranked toward Golf Course Road and Central Gurgaon first.
+              Submit your profile for a list fitted to you. Estimates use listed price per sq ft, not a live rental listing.
+            </p>
+            <div id="list"></div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>© <span id="year"></span> GurgaonFlat · <a href="mailto:connect@gurgaonflat.online">connect@gurgaonflat.online</a></p>
+      </footer>
+    </div>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+      const KEY = 'gf-assistant-v1';
+      const WORK = {
+        'Cyber City': { lat: 28.495, lng: 77.089, areas: ['Golf Course Road', 'Central Gurgaon'] },
+        'Udyog Vihar': { lat: 28.501, lng: 77.085, areas: ['Central Gurgaon', 'Dwarka Expressway'] },
+        'Golf Course Road': { lat: 28.46, lng: 77.098, areas: ['Golf Course Road', 'Golf Course Extension'] },
+        'Sohna Road': { lat: 28.419, lng: 77.062, areas: ['Sohna Road', 'Southern Peripheral Road'] },
+        'New Gurgaon': { lat: 28.398, lng: 76.945, areas: ['New Gurgaon', 'Dwarka Expressway'] },
+        'Dwarka Expressway': { lat: 28.49, lng: 76.985, areas: ['Dwarka Expressway', 'New Gurgaon'] }
+      };
+      const FALLBACK = [
+        { name: 'DLF Magnolias', slug: 'dlf-magnolias', area: 'Golf Course Road', sector: 'Sector 42', latitude: 28.4628, longitude: 77.0972, pricePerSqft: 18500, bhkOptions: [3, 4, 5], tier: 'S', overallRating: 9.1, rankingScore: 8.9 },
+        { name: 'DLF Park Place', slug: 'dlf-park-place', area: 'Golf Course Road', sector: 'Sector 54', latitude: 28.4752, longitude: 77.1015, pricePerSqft: 15200, bhkOptions: [3, 4], tier: 'A', overallRating: 8.6, rankingScore: 8.4 },
+        { name: 'Ambience Creacions', slug: 'ambience-creacions', area: 'Golf Course Road', sector: 'Sector 43', latitude: 28.4701, longitude: 77.0988, pricePerSqft: 13800, bhkOptions: [2, 3, 4], tier: 'A', overallRating: 8.2, rankingScore: 8.0 },
+        { name: 'IREO Skyon', slug: 'ireo-skyon', area: 'Golf Course Extension', sector: 'Sector 60', latitude: 28.4318, longitude: 77.1005, pricePerSqft: 11200, bhkOptions: [2, 3, 4], tier: 'A', overallRating: 8.1, rankingScore: 7.9 },
+        { name: 'M3M Golf Estate', slug: 'm3m-golf-estate', area: 'Golf Course Extension', sector: 'Sector 65', latitude: 28.4205, longitude: 77.0938, pricePerSqft: 11500, bhkOptions: [3, 4], tier: 'A', overallRating: 8.0, rankingScore: 7.8 },
+        { name: 'Tulip Violet', slug: 'tulip-violet', area: 'Golf Course Extension', sector: 'Sector 69', latitude: 28.4088, longitude: 77.0912, pricePerSqft: 7600, bhkOptions: [2, 3], tier: 'B', overallRating: 7.4, rankingScore: 7.2 },
+        { name: 'Sobha City', slug: 'sobha-city', area: 'Dwarka Expressway', sector: 'Sector 108', latitude: 28.5005, longitude: 76.993, pricePerSqft: 9800, bhkOptions: [2, 3, 4], tier: 'A', overallRating: 8.0, rankingScore: 7.7 },
+        { name: 'Godrej Aria', slug: 'godrej-aria', area: 'Dwarka Expressway', sector: 'Sector 79', latitude: 28.421, longitude: 76.961, pricePerSqft: 8700, bhkOptions: [2, 3], tier: 'B', overallRating: 7.6, rankingScore: 7.3 },
+        { name: 'DLF The Ultima', slug: 'dlf-the-ultima', area: 'New Gurgaon', sector: 'Sector 81', latitude: 28.4008, longitude: 76.9522, pricePerSqft: 9600, bhkOptions: [3, 4], tier: 'A', overallRating: 8.0, rankingScore: 7.6 },
+        { name: 'Emaar Palm Gardens', slug: 'emaar-palm-gardens', area: 'New Gurgaon', sector: 'Sector 83', latitude: 28.3985, longitude: 76.94, pricePerSqft: 7400, bhkOptions: [2, 3], tier: 'B', overallRating: 7.5, rankingScore: 7.2 },
+        { name: 'Raheja Vedaanta', slug: 'raheja-vedaanta', area: 'New Gurgaon', sector: 'Sector 108', latitude: 28.489, longitude: 76.968, pricePerSqft: 6200, bhkOptions: [2, 3], tier: 'B', overallRating: 7.2, rankingScore: 6.9 },
+        { name: 'Vatika City', slug: 'vatika-city', area: 'Sohna Road', sector: 'Sector 49', latitude: 28.4182, longitude: 77.0618, pricePerSqft: 8100, bhkOptions: [2, 3, 4], tier: 'B', overallRating: 7.5, rankingScore: 7.3 },
+        { name: 'Heritage City', slug: 'heritage-city', area: 'Central Gurgaon', sector: 'Sector 25', latitude: 28.4782, longitude: 77.0838, pricePerSqft: 12500, bhkOptions: [3, 4], tier: 'A', overallRating: 8.3, rankingScore: 8.0 },
+        { name: 'Park View Spa', slug: 'park-view-spa', area: 'Central Gurgaon', sector: 'Sector 57', latitude: 28.4452, longitude: 77.0812, pricePerSqft: 9400, bhkOptions: [3, 4], tier: 'B', overallRating: 7.7, rankingScore: 7.4 }
+      ];
+
+      function esc(value) {
+        return String(value).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+      }
+      function money(n) {
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n);
+      }
+      function kmBetween(a, b) {
+        const r = 6371;
+        const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+        const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+        const s = Math.sin(dLat / 2) ** 2 + Math.cos((a.lat * Math.PI) / 180) * Math.cos((b.lat * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+        return 2 * r * Math.asin(Math.sqrt(s));
+      }
+      function rentOf(society, bhk) {
+        const sqft = { 2: 1100, 3: 1650, 4: 2400 }[bhk] || 1400;
+        const price = Number(society.pricePerSqft) || 8000;
+        return Math.round((price * sqft * 0.025) / 12);
+      }
+      function readProfile(form) {
+        const data = new FormData(form);
+        return {
+          workplace: data.get('workplace'),
+          budget: Number(data.get('budget')),
+          commute: Number(data.get('commute')),
+          bhk: Number(data.get('bhk')),
+          lifestyle: data.getAll('lifestyle')
+        };
+      }
+      function applyProfile(profile) {
+        for (const key of ['workplace', 'budget', 'commute', 'bhk']) {
+          const el = document.getElementById(key);
+          if (profile[key] != null) el.value = String(profile[key]);
+        }
+        document.querySelectorAll('input[name="lifestyle"]').forEach((box) => {
+          box.checked = (profile.lifestyle || []).includes(box.value);
+        });
+      }
+      function rank(societies, profile) {
+        const work = WORK[profile.workplace];
+        return societies
+          .map((society) => {
+            const reasons = [];
+            let score = Number(society.rankingScore || society.overallRating || 6);
+            const bhks = society.bhkOptions || society.bhk || [];
+            if (bhks.map(Number).includes(profile.bhk)) {
+              score += 2.2;
+              reasons.push(profile.bhk + ' BHK is offered');
+            } else {
+              score -= 3;
+              reasons.push('No ' + profile.bhk + ' BHK listed');
+            }
+            const rent = rentOf(society, profile.bhk);
+            if (rent <= profile.budget) {
+              score += 2;
+              reasons.push('Estimated rent ' + money(rent) + ' sits inside your budget');
+            } else if (rent <= profile.budget * 1.15) {
+              score += 0.4;
+              reasons.push('Estimated rent ' + money(rent) + ' is just over budget');
+            } else {
+              score -= 3.5;
+              reasons.push('Estimated rent ' + money(rent) + ' is over budget');
+            }
+            if (work && society.latitude && society.longitude) {
+              const mins = Math.round((kmBetween(work, { lat: society.latitude, lng: society.longitude }) / 22) * 60);
+              if (mins <= profile.commute) {
+                score += 2.5;
+                reasons.push('About ' + mins + ' min to ' + profile.workplace);
+              } else {
+                score -= Math.min(4, (mins - profile.commute) / 8);
+                reasons.push(mins + ' min to ' + profile.workplace + ', past your ' + profile.commute + ' min limit');
+              }
+            } else if (profile.workplace === 'Flexible / remote') {
+              score += 0.6;
+              reasons.push('Commute is flexible, so the society score matters more');
+            }
+            const life = profile.lifestyle || [];
+            const quietAreas = ['New Gurgaon', 'Dwarka Expressway', 'Golf Course Extension', 'Sohna Road'];
+            const officeAreas = ['Golf Course Road', 'Central Gurgaon'];
+            if (life.includes('quiet') && quietAreas.includes(society.area)) {
+              score += 1.2;
+              reasons.push(society.area + ' fits a quieter layout');
+            }
+            if (life.includes('family') && profile.bhk >= 3 && quietAreas.includes(society.area)) {
+              score += 1;
+              reasons.push('Larger home in a family corridor');
+            }
+            if ((life.includes('metro') || life.includes('social')) && officeAreas.includes(society.area)) {
+              score += 1.2;
+              reasons.push(society.area + ' stays close to offices and the social core');
+            }
+            if (work && work.areas.includes(society.area)) {
+              score += 0.8;
+              reasons.push('Same corridor residents use for ' + profile.workplace);
+            }
+            return { society, score, reasons, rent };
+          })
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 5);
+      }
+      function render(rows, sourceNote) {
+        const status = document.getElementById('status');
+        const list = document.getElementById('list');
+        status.textContent = sourceNote;
+        list.innerHTML = rows
+          .map((row) => {
+            const s = row.society;
+            const href = '/society/' + encodeURIComponent(s.slug);
+            return (
+              '<article class="result"><strong><a href="' + href + '">' + esc(s.name) + '</a></strong>' +
+              '<div class="meta">' + esc(s.tier) + ' tier · ' + esc(s.area) + (s.sector ? ' · ' + esc(s.sector) : '') + ' · about ' + money(row.rent) + '/month</div>' +
+              '<ul class="why">' + row.reasons.map((r) => '<li>' + esc(r) + '</li>').join('') + '</ul></article>'
+            );
+          })
+          .join('');
+      }
+      async function loadSocieties() {
+        const url = 'https://society-tier.onrender.com/api/societies?limit=100&sort=rating';
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 8000);
+        try {
+          const res = await fetch(url, { signal: ctrl.signal });
+          if (!res.ok) throw new Error('bad status');
+          const data = await res.json();
+          const items = data.items || data.societies || data;
+          if (!Array.isArray(items) || !items.length) throw new Error('empty');
+          return { items, note: 'Researched just now from the live GurgaonFlat society index (' + new Date().toLocaleString('en-IN') + '). Rent is estimated from price per sq ft.' };
+        } catch {
+          return { items: FALLBACK, note: 'Live index was unreachable, so v1 used the built-in Gurgaon society index. Rent is estimated from price per sq ft.' };
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+      async function recommend(profile) {
+        localStorage.setItem(KEY, JSON.stringify(profile));
+        document.getElementById('status').textContent = 'Researching societies for your commute, budget, and lifestyle…';
+        const { items, note } = await loadSocieties();
+        render(rank(items, profile), 'Saved on this device. ' + note);
+      }
+      const form = document.getElementById('profile');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        recommend(readProfile(form));
+      });
+      try {
+        const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (saved && saved.workplace && saved.budget) {
+          applyProfile(saved);
+          document.getElementById('memory-note').textContent = 'Using the context saved in this browser from your last visit.';
+          recommend(saved);
+        }
+      } catch { /* ignore broken storage */ }
+    </script>
+  </body>
+</html>

@@ -63,6 +63,12 @@ export default function Navbar() {
           </Link>
 
           <nav className="ml-6 hidden items-center gap-1 lg:flex">
+            <a
+              href="/assistant"
+              className="relative rounded-full px-3.5 py-2 text-sm font-medium text-slate-500 transition-colors duration-200 hover:text-ink"
+            >
+              Assistant
+            </a>
             {LINKS.map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -146,6 +152,13 @@ export default function Navbar() {
           </div>
 
           <nav className="flex flex-col gap-1 p-4">
+            <a
+              href="/assistant"
+              onClick={close}
+              className="rounded-xl px-3.5 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              Assistant
+            </a>
             {LINKS.map(({ to, label }) => (
               <NavLink
                 key={to}
